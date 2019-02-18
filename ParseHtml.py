@@ -2,7 +2,7 @@ from WebScrapper import getPage
 from bs4 import BeautifulSoup as bSoup
 
 def getCourse(term,course,courseNo):
-    pageHtml = getPage('201901','CSC','111') # html page, str
+    pageHtml = getPage(term,course,courseNo) # html page, str
     pageSoup = bSoup(pageHtml,'lxml')       # parsed html, soup
 
     '''
