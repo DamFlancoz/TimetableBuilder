@@ -1,15 +1,19 @@
 '''
 TODO in WebScrapper: handle not existing page search
 TODO in all libs, Put Tests
-TODO show table, evalTable
+TODO show table
+TODO fix evalTable for 12pm
 '''
 
 
 
 '''
 getCourse(term,course,courseNo)
-takes - term,course,courseno
+
 returns - course dictionary
+
+Stores with key = selectedCourses[i][0]+selectedCourses[i][1]
+eg. 'MATH101'
 
 Parses html to get all information
 - 'section' eg. 'A01'
@@ -22,11 +26,19 @@ Parses html to get all information
 '''
 from PythonLibs.ParseHtml import getCourse
 
+'''
+evalTable(selectedCourses,Courseinfo,tables)
+
+Changes var tables to have tables without conflicts of
+selectedCourses in it.
+'''
+from PythonLibs.EvalTable import evalTable
+
 
 
 '''
 setTerm
-takes - input arguments for term and
+takes - input argument for term and
 return - term value equal accordingly
 '''
 from time import localtime
@@ -70,7 +82,7 @@ def setTerm(inp):
 '''
 helps in add and remove
 '''
-def evalCourse(i):
+def convertCourse(i):
     i = i.strip()
     i = i.upper()
     name = ''
@@ -83,11 +95,20 @@ def evalCourse(i):
 
 
 
-# Global Variables
+############################## Global Variables
+
 coursesInfo = {}      # courses' information from webpage
 term = ''             # term chosen
 selectedCourses = []  #[[name1,number1],[name2,number2]]; courses selected by user
 
+'''
+tables stores list of table elements
+table is a list of days which each store list of classes that day
+[M,T,W,R,F]
+M = [[8.5, 10, 'MATH200', 'A01'],[8.5, 9.5, 'MATH204', 'A02']]
+each class elements forms, [start,end,course,section] to trace it back
+'''
+tables=[[[],[],[],[],[]]] #single table with all free days to start
 
 
 
@@ -107,20 +128,17 @@ Use
 '''
 
 while True:
-
-    inp = raw_input(">>> ").lower().strip()
     print
+    inp = raw_input(">>> ").lower().strip()
 
     # Commands
     # Sets term for courses
     if 'term' in inp:
 
         inp = inp.replace('term','').strip()
-
+        
         try:
-            
             term = setTerm(inp)
-
         except:
             print 'Term takes an input; next, current or termcode'
 
@@ -132,7 +150,7 @@ while True:
         
         for course in inp:
 
-            course = evalCourse(course.strip()) # evalCourse returns [name,number]
+            course = convertCourse(course.strip()) # evalCourse returns [name,number]
 
             if course not in selectedCourses:
                 selectedCourses.append(course)
@@ -145,7 +163,7 @@ while True:
                  
         for course in inp:
 
-            course = evalCourse(course.strip()) # evalCourse returns [name,number]
+            course = convertCourse(course.strip()) # evalCourse returns [name,number]
 
             if course in selectedCourses:
                 selectedCourses.remove(course)
@@ -165,12 +183,13 @@ while True:
         print #moves cursor to next line
 
     # Evaluates TimeTable
-    elif ('calc' in inp) or ('evaluate' in inp) or ('get tables' in inp):
+    elif ('calc' in inp) or ('eval table' in inp) or ('get tables' in inp):
 
-        # getCourse also returns a dictionary
-        # course here is also a list
         for course in selectedCourses:
             coursesInfo[course[0]+course[1]] = getCourse(term,course[0],course[1])
+        
+        tables = [[[],[],[],[],[]]] #free weekby default
+        tables = evalTable(selectedCourses,coursesInfo,tables)
 
     elif 'showTable' in inp:
         
