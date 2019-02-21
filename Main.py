@@ -1,8 +1,7 @@
 '''
 TODO in WebScrapper: handle not existing page search
-TODO in all libs, Put Tests
+TODO in all libs, Put Tests(EvalTable done)
 TODO show table
-TODO fix evalTable for 12pm
 '''
 
 
