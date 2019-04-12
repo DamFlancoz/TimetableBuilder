@@ -1,8 +1,12 @@
 from WebScrapper import getPage
 from bs4 import BeautifulSoup as bSoup
 
-def getCourse(term,course,courseNo):
-    pageHtml = getPage(term,course,courseNo) # html page, str
+'''
+takes: term and Course Object
+returns: same Course Object with info filled in
+'''
+def getCourse(term,course):
+    pageHtml = getPage(term,course)         # html page, str
     pageSoup = bSoup(pageHtml,'lxml')       # parsed html, soup
 
     '''
@@ -20,45 +24,68 @@ def getCourse(term,course,courseNo):
     '''
     sectionList = sectionTable.findAll('tr')
 
-    lectures = []
-    labs = []
-    tutorials = []
-
     # parses sections
     for i in range(0,len(sectionList),4):
         if 'Main Campus' in str(sectionList[i+1]):
-            section = {}
+            section = Section()
             
             titleList = str(sectionList[i]).split(' - ')
-            section['section'] = titleList[3][:3] #some tags were also coming at the end
-            section['crn'] = titleList[1]
+            section.section = titleList[3][:3] #some tags were also coming at the end
+            section.crn = titleList[1]
             # can add course if needed
 
             info = sectionList[i+3].findAll('td')
-            section['time'] = str(info[1].text)
-            section['days'] = str(info[2].text)
-            section['place'] = str(info[3].text)
-            section['instructor'] = str(info[6].text)
-            section['type'] = str(info[5].text)
+            section.setTime(str(info[1].text)) # turns str time to tuple
+            section.days = str(info[2].text)
+            section.place = str(info[3].text)
+            section.instructor = str(info[6].text)
 
-            if section['type'] == 'Lab':
-                labs.append(section)
-            elif section['type'] == 'Lecture':
-                lectures.append(section)
-            elif section['type'] == 'Tutorial':
-                tutorials.append(section)
-    return {'lecture':lectures,'labs':labs,'tutorials':tutorials} # dict of course
+            # str(info[5].text) tells if class is lecture/lab/tutorial
+
+            if str(info[5].text) == 'Lab':
+                course.labs.append(section)
+            elif str(info[5].text) == 'Lecture':
+                course.lectures.append(section)
+            elif str(info[5].text) == 'Tutorial':
+                course.tutorials.append(section)
+
+    return course
 
 
-def test_getCourse():
+def Test_getCourse():
     '''
-    Case of CSC11, 2019 jan-term
+    Case of CSC111, 2019 jan-term
     '''
-    expected = {'labs': [{'section': 'B01', 'type': 'Lab', 'days': 'W', 'place': 'Engineering Comp Science Bldg 242', 'time': '11:30 am - 1:20 pm', 'instructor': 'TBA', 'crn': '20638'}, {'name': 'B02', 'type': 'Lab', 'days': 'W', 'place': 'Engineering Comp Science Bldg 242', 'time': '1:30 pm - 3:20 pm', 'instructor': 'TBA', 'crn': '20639'}, {'name': 'B03', 'type': 'Lab', 'days': 'W', 'place': 'Engineering Comp Science Bldg 242', 'time': '3:30 pm - 5:20 pm', 'instructor': 'TBA', 'crn': '20640'}], 'lecture': [{'name': 'A01', 'type': 'Lecture', 'days': 'MR', 'place': 'Engineering Comp Science Bldg 125', 'time': '10:00 am - 11:20 am', 'instructor': 'William Herbert  Bird (P)', 'crn': '20636'}, {'name': 'A02', 'type': 'Lecture', 'days': 'MR', 'place': 'Engineering Comp Science Bldg 125', 'time': '10:00 am - 11:20 am', 'instructor': 'William Herbert  Bird (P)', 'crn': '20637'}], 'tutorials': []}
+  
+    getting = getCourse('201901',Course('CSC','111'))
+
+    expected ='''Course: CSC 111
+Lectures:
+	Section: A01 Time: (10, 11.5) Days: MR
+	Section: A02 Time: (10, 11.5) Days: MR
+Labs:
+	Section: B01 Time: (11.5, 13.5) Days: W
+	Section: B02 Time: (13.5, 15.5) Days: W
+	Section: B03 Time: (15.5, 17.5) Days: W
+Tutorials:
+'''
+    return str(getting) == expected
+
+
+if __name__=='__main__':
     
-    getting = getCourse('201901','CSC','111')
+    from Course_Section_Classes import *
+
+    print Test_getCourse()
+
+
     
-    return getting == expected
+    
+'''
+Uncomment if want to access getting value at the end
+getting = getCourse('201901',Course('CSC','111'))
+'''
+
 
 
 
