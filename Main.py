@@ -1,7 +1,15 @@
 '''
-TODO in WebScrapper: handle not existing page search
-TODO in all libs, Put Tests(EvalTable done)
-TODO show table
+Working with classes:
+term
+rem
+add
+show
+
+TODO:
+Webscrapper
+PageParser
+TableEvalater
+Add Table class
 '''
 
 
@@ -33,15 +41,18 @@ selectedCourses in it.
 '''
 from PythonLibs.EvalTable import evalTable
 
+# Documentation
+from PythonLibs.Course_Section_Classes import *
 
+
+
+from time import localtime
 
 '''
 setTerm
 takes - input argument for term and
 return - term value equal accordingly
 '''
-from time import localtime
-
 def setTerm(inp):
     if ('next' in inp) or ('n' in inp):
                 
@@ -79,11 +90,12 @@ def setTerm(inp):
 
 
 '''
+math101/MaTh 101 = ['MATH','101']
 helps in add and remove
 '''
 def convertCourse(i):
-    i = i.strip()
-    i = i.upper()
+    i = i.strip().upper()
+
     name = ''
     num = ''
     for char in i:
@@ -97,8 +109,8 @@ def convertCourse(i):
 ############################## Global Variables
 
 coursesInfo = {}      # courses' information from webpage
-term = ''             # term chosen
-selectedCourses = []  #[[name1,number1],[name2,number2]]; courses selected by user
+term = '<choose term>'# term chosen
+selectedCourses = []  # Course objects
 
 '''
 tables stores list of table elements
@@ -120,9 +132,11 @@ Use
 - Commas(,) to to seperate values, eg. add math 101, csc111
 - Space in between words, eg. jan 2019 instead of jan2019
 - Term has commands next and current
-- Course/Add, eg. add math101,csc111 etc.
-- Remove/Rem, eg. rem math101 etc.
-- Show, eg. show, see, see courses
+- Add, eg. add math101,csc111 etc.
+- Remove/rem/rmv, eg. rem math101 etc.
+- Show, to see selected courses
+- Calc to Calculate all the tables
+- ShowTable to see tables (TODO) 
 - Quit to quit
 '''
 
@@ -134,6 +148,7 @@ while True:
     # Sets term for courses
     if 'term' in inp:
 
+        #remove command word and get the argument
         inp = inp.replace('term','').strip()
         
         try:
@@ -144,7 +159,7 @@ while True:
     # Adds course(s)
     elif 'add' in inp:
 
-        #removes command word and makes into string of arguments
+        #removes command word and makes list of arguments
         inp = inp.replace('add','').split(',')
         
         for course in inp:
@@ -152,12 +167,12 @@ while True:
             course = convertCourse(course.strip()) # evalCourse returns [name,number]
 
             if course not in selectedCourses:
-                selectedCourses.append(course)
+                selectedCourses.append(Course(course[0],course[1]))
 
     # Removes course(s)
     elif ('remove' in inp) or ('rem' in inp) or ('rmv' in inp):
 
-        #removes command word and makes into string of arguments
+        #removes command word and makes list of arguments
         inp = inp.replace('remove','').replace('rem','').replace('rmv','').split(',')
                  
         for course in inp:
@@ -171,13 +186,10 @@ while True:
     # TODO: and Table
     elif inp in ['show','show courses']:
 
-        if (term == ''):
-            print '<choose term>' + ': ',
-        else:
-            print term + ': ',
+        print term + ': ',
 
         for course in selectedCourses:
-            print course[0],course[1]+',',
+            print course.course,course.num+',',
 
         print #moves cursor to next line
 
