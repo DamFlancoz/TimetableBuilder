@@ -6,9 +6,9 @@ from Course_Section_Classes import *
 takes: term and Course Object
 returns: same Course Object with info filled in
 '''
-def getCourse(term,course):
-    pageHtml = getPage(term,course)         # html page, str
-    pageSoup = bSoup(pageHtml,'lxml')       # parsed html, soup
+def getCourse(course,coursePageHtml):
+    
+    pageSoup = bSoup(coursePageHtml,'lxml')       # parsed html, soup
 
     '''
     Gives back table of all classes and other tables in list. [0] takes needed
@@ -33,7 +33,10 @@ def getCourse(term,course):
             titleList = str(sectionList[i]).split(' - ')
             section.section = titleList[3][:3] #some tags were also coming at the end
             section.crn = titleList[1]
-            # can add course if needed
+
+            courseName = titleList[2].split(' ') #eg ['CSC','111']
+            section.cName = courseName[0]
+            section.cNum = courseName[1]
 
             info = sectionList[i+3].findAll('td')
             section.setTime(str(info[1].text)) # turns str time to tuple
@@ -57,19 +60,23 @@ def Test_getCourse():
     '''
     Case of CSC111, 2019 jan-term
     '''
+
+    with open('TestParserPage_CSC111Spring2019.html','r') as t:
+        coursePageHtml = t.read()
   
-    getting = getCourse('201901',Course('CSC','111'))
+    getting = getCourse(Course('CSC','111'),coursePageHtml) #returns Course object
 
     expected ='''Course: CSC 111
 Lectures:
-	Section: A01 Time: (10, 11.5) Days: MR
-	Section: A02 Time: (10, 11.5) Days: MR
+	Course: CSC 111 | Section: A01 | Time: (10, 11.5) | Days: MR
+	Course: CSC 111 | Section: A02 | Time: (10, 11.5) | Days: MR
 Labs:
-	Section: B01 Time: (11.5, 13.5) Days: W
-	Section: B02 Time: (13.5, 15.5) Days: W
-	Section: B03 Time: (15.5, 17.5) Days: W
+	Course: CSC 111 | Section: B01 | Time: (11.5, 13.5) | Days: W
+	Course: CSC 111 | Section: B02 | Time: (13.5, 15.5) | Days: W
+	Course: CSC 111 | Section: B03 | Time: (15.5, 17.5) | Days: W
 Tutorials:
 '''
+    
     return str(getting) == expected
 
 
@@ -79,13 +86,6 @@ if __name__=='__main__':
 
     print Test_getCourse()
 
-
-    
-    
-'''
-Uncomment if want to access getting value at the end
-getting = getCourse('201901',Course('CSC','111'))
-'''
 
 
 

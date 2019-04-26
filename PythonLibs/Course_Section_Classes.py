@@ -1,3 +1,14 @@
+
+class Table:
+
+    def __init__(self):
+
+        self.mon = []
+        self.tues = []
+        self.wed
+
+
+
 '''
 Can be conpared to [course,num] or Course objects
 '''
@@ -50,6 +61,8 @@ class Section:
 
     def __init__(self):
 
+        self.cName = ''
+        self.cNum = ''
         self.section = ''
         self.crn = ''
         self.time = ()
@@ -58,8 +71,11 @@ class Section:
         self.instructor = ''
 
     def __str__(self):
-        return ('Section: ' + self.section + ' Time: ' + str(self.time)
-                + ' Days: ' + self.days)
+        return ('Course: ' + self.cName + ' ' + self.cNum 
+                + ' | Section: ' + self.section
+                + ' | Time: ' + str(self.time)
+                + ' | Days: ' + self.days
+                )
 
     def setTime(self,time):
 
