@@ -1,5 +1,6 @@
 from WebScrapper import getPage
 from bs4 import BeautifulSoup as bSoup
+from Course_Section_Classes import * 
 
 '''
 takes: term and Course Object

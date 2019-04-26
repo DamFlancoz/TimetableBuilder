@@ -69,6 +69,8 @@ def insertSameInTable(section,table):
 
 def evalTable(selectedCourses,tables):
 
+    tables = [[[],[],[],[],[]]] #free weekby default
+
     #Acts as buffer for new tables made in each type for each section
     newTables={}
     
