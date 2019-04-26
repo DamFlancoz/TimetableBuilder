@@ -93,7 +93,7 @@ def setTerm(inp):
 math101/MaTh 101 = ['MATH','101']
 helps in add and remove
 '''
-def convertCourse(i):
+def processArgToCourse(i):
     i = i.strip().upper()
 
     name = ''
@@ -108,7 +108,6 @@ def convertCourse(i):
 
 ############################## Global Variables
 
-coursesInfo = {}      # courses' information from webpage
 term = '<choose term>'# term chosen
 selectedCourses = []  # Course objects
 
@@ -164,7 +163,7 @@ while True:
         
         for course in inp:
 
-            course = convertCourse(course.strip()) # evalCourse returns [name,number]
+            course = processArgToCourse(course.strip()) # returns [name,number]
 
             if course not in selectedCourses:
                 selectedCourses.append(Course(course[0],course[1]))
@@ -177,7 +176,7 @@ while True:
                  
         for course in inp:
 
-            course = convertCourse(course.strip()) # evalCourse returns [name,number]
+            course = processArgToCourse(course.strip()) # evalCourse returns [name,number]
 
             if course in selectedCourses:
                 selectedCourses.remove(course)
@@ -195,16 +194,23 @@ while True:
 
     # Evaluates TimeTable
     elif ('calc' in inp) or ('eval table' in inp) or ('get tables' in inp):
-
-        for course in selectedCourses:
-            coursesInfo[course[0]+course[1]] = getCourse(term,course[0],course[1])
         
-        tables = [[[],[],[],[],[]]] #free weekby default
-        tables = evalTable(selectedCourses,coursesInfo,tables)
+        # Adds course info from web to Course Object 
+        selectedCourses = map(lambda x: getCourse(term,x),selectedCourses)
+        
+        tables = evalTable(selectedCourses,tables)
 
-    elif 'showTable' in inp:
+    elif 'showtable' in inp:
         
         #TODO
+
+        # shows table at index 0
+
+        print tables[0][0]
+        print tables[0][1]
+        print tables[0][2]
+        print tables[0][3]
+        print tables[0][4]
         pass
 
     # Exits program            
