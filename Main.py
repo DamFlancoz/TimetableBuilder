@@ -1,18 +1,23 @@
 '''
-Working with classes:
-term
-rem
-add
-show
-
 TODO:
-Webscrapper
-PageParser
-TableEvalater
-Add Table class
+- remove bug which doubly adds section labels in calc when using more than
+  one course
+- add table class
+- add validation for inputs in all methods
+- take care of case in webscrapper if [age is not reachable or doesnot exist
+- add conditons in making table eg. start day at 10am
+
 '''
 
+'''
+getPage(term,course)
+term: should be in coded form eg. 201901
+course: Course object with course and num defined
 
+returns html page in str
+'''
+
+from PythonLibs.WebScrapper import getPage
 
 '''
 getCourse(term,course,courseNo)
@@ -41,11 +46,21 @@ selectedCourses in it.
 '''
 from PythonLibs.EvalTable import evalTable
 
-# Documentation
+'''
+All classes in use
+
+Course
+Section
+
+TODO: Table
+'''
 from PythonLibs.Course_Section_Classes import *
 
 
-
+'''
+Used to get system time.
+Used in setting term to current or next
+'''
 from time import localtime
 
 '''
@@ -108,7 +123,7 @@ def processArgToCourse(i):
 
 ############################## Global Variables
 
-term = '<choose term>'# term chosen
+term = setTerm('curr')# term chosen
 selectedCourses = []  # Course objects
 
 '''
@@ -195,8 +210,11 @@ while True:
     # Evaluates TimeTable
     elif ('calc' in inp) or ('eval table' in inp) or ('get tables' in inp):
         
-        # Adds course info from web to Course Object 
-        selectedCourses = map(lambda x: getCourse(term,x),selectedCourses)
+        # Adds course info from web to Course Object
+        selectedCourses = map(lambda page,course: getCourse(course,page),
+                              [getPage(term,i) for i in selectedCourses],
+                              selectedCourses
+                              )
         
         tables = evalTable(selectedCourses,tables)
 
@@ -211,7 +229,6 @@ while True:
         print tables[0][2]
         print tables[0][3]
         print tables[0][4]
-        pass
 
     # Exits program            
     elif inp in ['quit','exit','q','done']:
