@@ -141,7 +141,7 @@ tables=[[[],[],[],[],[]]] #single table with all free days to start
 
 ################################# Main Program
 
-print '''
+print( '''
 Use
 - Commas(,) to to seperate values, eg. add math 101, csc111
 - Space in between words, eg. jan 2019 instead of jan2019
@@ -152,11 +152,11 @@ Use
 - Calc to Calculate all the tables
 - ShowTable to see tables (TODO) 
 - Quit to quit
-'''
+''')
 
 while True:
-    print
-    inp = raw_input(">>> ").lower().strip()
+    print()
+    inp = input(">>> ").lower().strip()
 
     # Commands
     # Sets term for courses
@@ -168,7 +168,7 @@ while True:
         try:
             term = setTerm(inp)
         except:
-            print 'Term takes an input; next, current or termcode'
+            print('Term takes an input; next, current or termcode')
 
     # Adds course(s)
     elif 'add' in inp:
@@ -200,12 +200,12 @@ while True:
     # TODO: and Table
     elif inp in ['show','show courses']:
 
-        print term + ': ',
+        print (term + ': ',end = '')
 
         for course in selectedCourses:
-            print course.course,course.num+',',
+            print (course.course,course.num+',',end='')
 
-        print #moves cursor to next line
+        print() #moves cursor to next line
 
     # Evaluates TimeTable
     elif ('calc' in inp) or ('eval table' in inp) or ('get tables' in inp):
@@ -222,11 +222,11 @@ while True:
 
         # shows table at index 0
 
-        print tables[0][0]
-        print tables[0][1]
-        print tables[0][2]
-        print tables[0][3]
-        print tables[0][4]
+        print (tables[0][0])
+        print (tables[0][1])
+        print (tables[0][2])
+        print (tables[0][3])
+        print (tables[0][4])
 
     # Exits program            
     elif inp in ['quit','exit','q','done']:
@@ -239,7 +239,7 @@ while True:
         try:
             exec(inp)
         except:
-            print "Invalid Input"
+            print('Invalid Input')
 
 
 

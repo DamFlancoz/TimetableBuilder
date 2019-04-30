@@ -18,11 +18,11 @@ class NotFit(Exception):
     pass
 
 '''
-Checks timings for courses and inserts them table.
+Checks timings for section and inserts them table.
 Raises NotFit Error if any class on a day cannot fit in.
 
 inserts - [start,end,course+courseno.,section]
-eg. [12.5,13.5,'MATH101','T01]
+eg. [12.5,13.5,'MATH101','T01']
 '''
 def insertInTable(course,section,day,table):
     days={'M':0,'T':1,'W':2,'R':3,'F':4} #index for days in table
@@ -53,7 +53,8 @@ def insertInTable(course,section,day,table):
     return table
 
 '''
-Inserts in a class which has same timings as another inserted class
+Inserts in a section which has same timings as another inserted class
+eg. [12.5,13.5,'MATH101','T01'] to [12.5,13.5,'MATH101','T01','T02']
 '''
 def insertSameInTable(section,table):
     days={'M':0,'T':1,'W':2,'R':3,'F':4} #index for days in table
@@ -75,7 +76,8 @@ def evalTable(selectedCourses,tables):
     newTables={}
     
     for course in selectedCourses:
-        for Type in course.iterTypes():
+        for Type in iter(course):
+
             for section in Type:
                  for i,t in enumerate(tables):
 
@@ -115,8 +117,6 @@ system or IDE
 '''
 
 def test_evalTable():
-
-    from Course_Section_Classes import *
     
     coursesInfo = {'MATH200': {'labs': [],
   'lectures': [{'type': 'Lecture',
@@ -246,7 +246,8 @@ def test_evalTable():
         
 
 if __name__=='__main__':
-    print test_evalTable()
+    from Course_Section_Classes import *
+    print (test_evalTable())
 
     
 
