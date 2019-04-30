@@ -76,7 +76,7 @@ def evalTable(selectedCourses,tables):
     newTables={}
     
     for course in selectedCourses:
-        for Type in course.iterTypes():
+        for Type in iter(course):
             for section in Type:
                  for i,t in enumerate(tables):
 
