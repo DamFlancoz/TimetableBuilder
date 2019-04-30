@@ -49,7 +49,7 @@ class Course:
 
         return s
 
-    def __iter__(self): # type - lectures, labs & tutorials
+    def iterTypes(self): # type - lectures, labs & tutorials
         yield self.lectures
         yield self.labs
         yield self.tutorials
