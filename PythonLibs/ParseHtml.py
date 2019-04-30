@@ -1,12 +1,20 @@
-from WebScrapper import getPage
 from bs4 import BeautifulSoup as bSoup
-from Course_Section_Classes import * 
+
+'''
+Python3 gives error if you try to use import <class> to reach module in same
+directory
+'''
+if __name__=='PythonLibs.ParseHtml':
+    
+    from PythonLibs.Course_Section_Classes import *
+    print(1)
 
 '''
 takes: term and Course Object
 returns: same Course Object with info filled in
 '''
 def getCourse(course,coursePageHtml):
+    print(__name__)
     
     pageSoup = bSoup(coursePageHtml,'lxml')       # parsed html, soup
 
@@ -79,12 +87,11 @@ Tutorials:
     
     return str(getting) == expected
 
-
 if __name__=='__main__':
     
     from Course_Section_Classes import *
+    print (Test_getCourse())
 
-    print Test_getCourse()
 
 
 
