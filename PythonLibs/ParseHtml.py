@@ -7,14 +7,12 @@ directory
 if __name__=='PythonLibs.ParseHtml':
     
     from PythonLibs.Course_Section_Classes import *
-    print(1)
 
 '''
 takes: term and Course Object
 returns: same Course Object with info filled in
 '''
 def getCourse(course,coursePageHtml):
-    print(__name__)
     
     pageSoup = bSoup(coursePageHtml,'lxml')       # parsed html, soup
 
