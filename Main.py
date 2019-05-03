@@ -56,6 +56,14 @@ TODO: Table
 '''
 from PythonLibs.Course_Section_Classes import *
 
+'''
+All Exceptions defined here
+
+NoSectionsAvailable(course) - thrown by getPage() from WebScrapper when no section for 
+    Course object are found
+'''
+from PythonLibs.Exceptions import NoSectionsAvailable
+
 
 '''
 Used to get system time.
@@ -211,10 +219,18 @@ while True:
     elif ('calc' in inp) or ('eval table' in inp) or ('get tables' in inp):
         
         # Adds course info from web to Course Object
+        try:
+            selectedCourses = [getCourse(course,getPage(term,course)) for course in selectedCourses]
         
-        selectedCourses = [getCourse(course,getPage(term,course)) for course in selectedCourses]
+            tables = evalTable(selectedCourses,tables)
         
-        tables = evalTable(selectedCourses,tables)
+        except NoSectionsAvailable as e:
+            print(e)
+            
+            selectedCourses.remove(e.course)
+            
+            print('Removed the course.')
+            print('You may want to add a replacement course.')
 
     elif 'showtable' in inp:
         
