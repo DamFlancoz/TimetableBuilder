@@ -16,8 +16,8 @@ course: Course object with course and num defined
 
 returns html page in str
 '''
-
 from PythonLibs.WebScrapper import getPage
+
 
 '''
 getCourse(term,course,courseNo)
@@ -38,6 +38,7 @@ Parses html to get all information
 '''
 from PythonLibs.ParseHtml import getCourse
 
+
 '''
 evalTable(selectedCourses,Courseinfo,tables)
 
@@ -45,6 +46,7 @@ Changes var tables to have tables without conflicts of
 selectedCourses in it.
 '''
 from PythonLibs.EvalTable import evalTable
+
 
 '''
 All classes in use
@@ -54,13 +56,15 @@ Section
 
 TODO: Table
 '''
-from PythonLibs.Course_Section_Classes import *
+from PythonLibs.Course_Section_Classes import Table
+
 
 '''
 All Exceptions defined here
 
-NoSectionsAvailable(course) - thrown by getPage() from WebScrapper when no section for 
+NoSectionsAvailable(course) - Raised by getPage() from WebScrapper when no section for 
     Course object are found
+NotFit - Raised if a section does not fit in table
 '''
 from PythonLibs.Exceptions import NoSectionsAvailable
 
@@ -70,6 +74,7 @@ Used to get system time.
 Used in setting term to current or next
 '''
 from time import localtime
+
 
 '''
 setTerm
@@ -83,10 +88,10 @@ def setTerm(inp):
         time = localtime()
 
         if time[1] in [1,2,3,4]: # next term from may
-            term = str(time[0])+ '02'
+            term = str(time[0])+ '05'
 
         elif time[1] in [5,6,7,8]: # next term from sept
-            term = str(time[0])+ '03'
+            term = str(time[0])+ '09'
 
         else: #next term from jan
             term = str(time[0]+1)+ '01'
@@ -100,10 +105,10 @@ def setTerm(inp):
             term = str(time[0])+ '01'
 
         elif time[1] in [5,6,7,8]: # next term from may
-            term = str(time[0])+ '02'
+            term = str(time[0])+ '05'
 
         else: #current term from sept
-            term = str(time[0])+ '03'
+            term = str(time[0])+ '09'
 
     elif inp.isdigit() and len(inp) == 6:
         term = inp
@@ -141,7 +146,7 @@ table is a list of days which each store list of classes that day
 M = [[8.5, 10, 'MATH200', 'A01'],[8.5, 9.5, 'MATH204', 'A02']]
 each class elements forms, [start,end,course,section] to trace it back
 '''
-tables=[[[],[],[],[],[]]] #single table with all free days to start
+tables=[Table()] #single table with all free days to start
 
 
 
@@ -222,7 +227,7 @@ while True:
         try:
             selectedCourses = [getCourse(course,getPage(term,course)) for course in selectedCourses]
         
-            tables = evalTable(selectedCourses,tables)
+            tables = evalTable(selectedCourses)
         
         except NoSectionsAvailable as e:
             print(e)
@@ -236,13 +241,7 @@ while True:
         
         #TODO
 
-        # shows table at index 0
-
-        print (tables[0][0])
-        print (tables[0][1])
-        print (tables[0][2])
-        print (tables[0][3])
-        print (tables[0][4])
+        print(tables[0])
 
     # Exits program            
     elif inp in ['quit','exit','q','done']:

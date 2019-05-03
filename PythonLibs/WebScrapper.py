@@ -7,7 +7,7 @@ directory
 '''
 if __name__=='PythonLibs.WebScrapper':
     
-    from PythonLibs.Exceptions import *
+    from PythonLibs.Exceptions import NoSectionsAvailable
 
 '''
 Takes: term code, Course Object with course name and course no.
@@ -56,24 +56,25 @@ def Test_getPage():
         
     #Math 101 not in summer 2019
     try:
-        with open('TestOutWebScrapper.html','w') as t:
-            t.write(getPage('201902',Course('MATH','101')))
         
-        
+        getPage('201902',Course('MATH','101'))             
         print('Exception not Working')
             
     except NoSectionsAvailable as e:
-        print(e)
+        #print(e)
         print('Exception Works')
-        
-    except:
+   
+    except :
         print('Unexpected exception thrown')
+
+        
+    
         
 
 
 if __name__=='__main__':
     
-    from Course_Section_Classes import *
+    from Course_Section_Classes import Course
     Test_getPage()
     
     '''
@@ -81,7 +82,6 @@ if __name__=='__main__':
         
     Check TestOutWebScrapper.html for CSC 111 info
     Exception Works for C1SC 111
-    No classes Available for MATH 101 selected term.
     Exception Works
     '''
 
