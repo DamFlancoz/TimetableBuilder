@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup as bSoup
+#from Course_Section_Classes import *
 
 '''
 Python3 gives error if you try to use import <class> to reach module in same
