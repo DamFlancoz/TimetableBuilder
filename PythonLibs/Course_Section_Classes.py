@@ -3,14 +3,32 @@ class Table:
 
     def __init__(self):
 
-        self.mon = []
-        self.tues = []
-        self.wed
+        self.M = []
+        self.T = []
+        self.W = []
+        self.R = []
+        self.F = []
+        
+    # allows t['M'] to access t.M
+    # Used in inserting in tables
+    def __getitem__(self,i):
+        return eval('self.'+i)
+        
+    def __iter__(self):
+        
+        yield self.M
+        yield self.T
+        yield self.W
+        yield self.R
+        yield self.F
+        
+    def __str__(self): #TODO: imporve this
+        return '-'+'\n-'.join([ ''.join([str(j) for j in i]) for i in list(self)])
 
 
 
 '''
-Can be conpared to [course,num] or Course objects
+Can be compared to [course,num] or Course objects
 '''
 class Course:
 
