@@ -1,11 +1,10 @@
 '''
 TODO:
-- remove bug which doubly adds section labels in calc when using more than
-  one course
-- add table class
 - add validation for inputs in all methods
-- take care of case in webscrapper if [age is not reachable or doesnot exist
 - add conditons in making table eg. start day at 10am
+- repeated adding bug with mah101 and csc115, different 
+  adding incase of csc115,math101 amd math101,csc115
+  intial table is fine but after end at 15 problem appears
 
 '''
 
@@ -56,7 +55,7 @@ Section
 
 TODO: Table
 '''
-from PythonLibs.Course_Section_Classes import Table
+from PythonLibs.Course_Section_Classes import Table,Course
 
 
 '''
@@ -66,7 +65,7 @@ NoSectionsAvailable(course) - Raised by getPage() from WebScrapper when no secti
     Course object are found
 NotFit - Raised if a section does not fit in table
 '''
-from PythonLibs.Exceptions import NoSectionsAvailable
+from PythonLibs.Exceptions import NoSectionsAvailable,NoSectionOfTypeFit
 
 
 '''
@@ -138,6 +137,7 @@ def processArgToCourse(i):
 
 term = setTerm('curr')# term chosen
 selectedCourses = []  # Course objects
+dayLengths = {'M':[0,24],'T':[0,24],'W':[0,24],'R':[0,24],'F':[0,24]}
 
 '''
 tables stores list of table elements
@@ -161,6 +161,9 @@ Use
 - Term has commands next and current
 - Add, eg. add math101,csc111 etc.
 - Remove/rem/rmv, eg. rem math101 etc.
+- Start <MR or all> at 10, use 24hr and decimals eg. start MR at 13.5
+- start M at reset, to reset the value
+- End <MR or all> at 10
 - Show, to see selected courses
 - Calc to Calculate all the tables
 - ShowTable to see tables (TODO) 
@@ -210,7 +213,6 @@ while True:
                 selectedCourses.remove(course)
 
     # Displays term: courses
-    # TODO: and Table
     elif inp in ['show','show courses']:
 
         print (term + ': ',end = '')
@@ -219,6 +221,43 @@ while True:
             print (course.course,course.num+',',end='')
 
         print() #moves cursor to next line
+        print(i+': '+str(dayLengths[i]) for i in dayLengths)
+
+    elif 'start' in inp and 'at' in inp: 
+        inp = inp.split(' ')
+
+        if inp[1] == 'all':
+            if inp[3] == 'reset':
+                for day in dayLengths:
+                    dayLengths[day][0] = 0
+            else:
+                for day in dayLengths:
+                    dayLengths[day][0] = int(inp[3])
+        else:
+            if inp[3] == 'reset':
+                for day in inp[1].upper():
+                    dayLengths[day][0] = 0
+            else:
+                for day in inp[1].upper():
+                    dayLengths[day][0] = int(inp[3])
+
+    elif 'end' in inp and 'at' in inp: 
+        inp = inp.split(' ')
+
+        if inp[1] == 'all':
+            if inp[3] == 'reset':
+                for day in dayLengths:
+                    dayLengths[day][1] = 24
+            else:
+                for day in dayLengths:
+                    dayLengths[day][1] = int(inp[3])
+        else:
+            if inp[3] == 'reset':
+                for day in inp[1].upper():
+                    dayLengths[day][1] = 24
+            else:
+                for day in inp[1].upper():
+                    dayLengths[day][1] = int(inp[3])
 
     # Evaluates TimeTable
     elif ('calc' in inp) or ('eval table' in inp) or ('get tables' in inp):
@@ -227,15 +266,21 @@ while True:
         try:
             selectedCourses = [getCourse(course,getPage(term,course)) for course in selectedCourses]
         
-            tables = evalTable(selectedCourses)
+            tables = evalTable(selectedCourses,dayLengths)
         
         except NoSectionsAvailable as e:
-            print(e)
             
             selectedCourses.remove(e.course)
             
+            print(e.course.course,e.course.num,'is not available in',term)
             print('Removed the course.')
             print('You may want to add a replacement course.')
+
+        except NoSectionOfTypeFit as e:
+
+            print('Current time restrictions dont allow you to take all classes of',
+                   e.course.course,e.course.num)
+            print('Change the Time restrictions or remove the course')
 
     elif 'showtable' in inp:
         
@@ -250,11 +295,7 @@ while True:
 
     # Excecutes a python command or deems input invalid
     else:
-
-        try:
-            exec(inp)
-        except:
-            print('Invalid Input')
+        print('Invalid Input')
 
 
 

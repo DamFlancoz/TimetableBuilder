@@ -8,10 +8,20 @@ class Table:
         self.W = []
         self.R = []
         self.F = []
+
+        # each element is a list of sections which have same time
+        self.sections = [] 
         
-    # allows t['M'] to access t.M
-    # Used in inserting in tables
+        #adds Course('start) and Course('end') to each day
+        #self.addPaddingCourses() 
+        
+        #Course('break') may also be added
+        
     def __getitem__(self,i):
+        
+        # allows t['M'] to access t.M
+        # Used in inserting in tables
+        
         return eval('self.'+i)
         
     def __iter__(self):
@@ -23,7 +33,26 @@ class Table:
         yield self.F
         
     def __str__(self): #TODO: imporve this
-        return '-'+'\n-'.join([ ''.join([str(j) for j in i]) for i in list(self)])
+        
+        # course_rep eg. [13,14,'CSC111','A01']
+        '''
+        return ''+'\n\n-'.join([ '\n '.join([ '(' + str(course_rep[0]) + ','
+                                             +str(course_rep[1]) + ') '
+                                             +'\n\t'.join([str(i) 
+                                                           for i in course_rep[2:]]) 
+                                         for course_rep in self[day]]) 
+                                for day in 'MTWRF'])
+        '''
+
+        return '\n'.join(day +': '+str(table)[1:-1] for day,table in zip('MTWRF',self))
+    
+    def addPddingCourses(self):
+        #adds Course('start) and Course('end') to each day
+        
+        for day in self:
+            day+=[Course('start',''),Course('end','')]
+            day[0].time = (0,0)
+            day[1].time = (24,24)
 
 
 
@@ -42,11 +71,23 @@ class Course:
         self.labs = []
         self.tutorials = []
 
-    def __eq__(self,course): #Used in main->rem Command, takes [course,num]
-        return course[0] == self.course and course[1] == self.num
+    def __eq__(self,course): 
+
+        if (type(course) == list and len(course) == 2): #Used in main->rem Command, takes [course,num]
+            return course[0] == self.course and course[1] == self.num
+
+        elif (type(course) == Course):
+            return (self.course == course.course
+                    and self.num == course.num
+                    and self.lectures == course.lectures 
+                    and self.labs == course.labs
+                    and self.tutorials == course.tutorials)
+        else :
+            return NotImplemented
+                    
 
     def __ne__(self,course): #Used in main-> rem Command, takes [course,num]
-        return course[0] != self.course and course[1] != self.num
+        return not self == course
 
     def __str__(self):
         s = 'Course: ' + self.course + ' ' + self.num + '\nLectures:\n'
@@ -87,9 +128,37 @@ class Section:
         self.days = ''
         self.place = ''
         self.instructor = ''
+        
+    def __eq__(self,other): 
+        
+        # Used in adding sections with same timings to table in eval table and in its test
+        # Gives true if of same timmings nad course, doesnot need to be exactly same.
+        # eg: T01 and T02 can be equal.
+        if ((type(other) == tuple or type(other) == list) and len(other) == 4): 
+            return (other[0] == self.time[0] and other[1] == self.time[1]
+                    and other[2] == self.cName+self.cNum)
+        
+        elif (type(other) == Section):
+            return (other.time == self.time 
+                    and other.days == self.days
+                    and other.cName == self.cName
+                    and other.cNum == self.cNum)
+        
+        else:
+            return NotImplemented
+
+    def __ne__(self,other): 
+        return (not self == other)
 
     def __str__(self):
         return ('Course: ' + self.cName + ' ' + self.cNum 
+                + ' | Section: ' + self.section
+                + ' | Time: ' + str(self.time)
+                + ' | Days: ' + self.days
+                )
+        
+    def __rep__(self):
+        return('Course: ' + self.cName + ' ' + self.cNum 
                 + ' | Section: ' + self.section
                 + ' | Time: ' + str(self.time)
                 + ' | Days: ' + self.days
@@ -110,12 +179,12 @@ class Section:
             t = time[i][:5].split(':') #converts to '3:30 ' or '10:50'
             t[0] = int(t[0].strip())   #takes hour eg. 3 or 10
 
+            # Adjust to 24 hr notation
+            if 'pm' in time[i] and t[0] != 12 :t[0]+=12
+
             # Adjust according to minutes eg. 3:30/3:20 to 3.5
             if '30' in t[1].strip() or '20' in t[1].strip(): t[0] += 0.5
             elif '50' in t[1].strip() : t[0] += 1
-
-            # Adjust to 24 hr notation
-            if 'pm' in time[i] and t[0] != 12 :t[0]+=12
 
             # Store new value
             time[i] = t[0]
