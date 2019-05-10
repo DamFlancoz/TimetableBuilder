@@ -1,0 +1,107 @@
+/*
+This CSS file contains rules that are shared between all parts of the site (base & admin pages)
+
+Table of Contents
+-----------------
+1.0 Base Look
+2.0 Layout Blocks
+3.0 Navigation Elements
+4.0 Layout block styles (how an h2 looks in the sidebar vs main content, etc)
+5.0 Helper classes (flash messages, adboxes, whitespace, clear, etc)
+6.0 Section-specific content (tech products, merch products, general books, etc)
+7.0 Page-specific content (homepage promo elements, etc)
+8.0 Legacy Content (Styles for pages/sectiosnt aht are beign phased out)
+*/
+
+/*
+******************
+1.0 Base Look
+******************
+*/
+
+/*
+******************
+2.0 Layout Blocks
+******************
+*/
+
+@keyframes impersonate-flash {
+    0%   {background-color: rgba(34, 45, 50, 0.8);}
+    60%  {background-color: rgba(255, 0, 0, 0.8);}
+    100% {background-color: rgba(34, 45, 50, 0.8);}
+}
+
+.impersonate-notice {
+    position: fixed;
+    top:0;
+    right: 0;
+    z-index: 9999;
+    padding: 10px;
+    background-color: rgba(34, 45, 50, 0.8);
+    border-radius: 0 0 0 5px;
+    border: 2px solid #1a2226;
+    border-top: none;
+    border-right: none;
+    color: white;
+    animation: impersonate-flash 0.5s 0.5s 3;
+}
+
+.impersonate-notice-exit,
+.impersonate-notice-exit:link,
+.impersonate-notice-exit:visited,
+.impersonate-notice-exit:hover,
+.impersonate-notice-exit:active
+{
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    border-radius: 3px;
+    box-shadow: none;
+    border: 1px solid #d73925;
+    background-color: rgba(34, 45, 50, 0.8);
+    width: 100%;
+    margin-top: 5px;
+    padding: 3px 0;
+    animation: impersonate-flash 0.5s 0.5s 3;
+}
+
+.impersonate-notice-exit:hover {
+    background-color: #d73925;
+}
+
+/*
+******************
+3.0 Navigation Elements
+******************
+*/
+
+/*
+******************
+4.0 Layout block styles
+******************
+*/
+
+/*
+******************
+5.0 Helper classes
+******************
+*/
+
+/*
+******************
+5.0 Helper classes
+******************
+*/
+
+/*
+******************
+6.0 Section-specific content
+******************
+*/
+
+/*
+******************
+7.0 Page-specific content
+******************
+*/

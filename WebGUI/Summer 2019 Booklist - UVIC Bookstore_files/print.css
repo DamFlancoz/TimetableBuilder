@@ -1,0 +1,207 @@
+/*
+* Print styles for the UVic Bookstore website
+* July 2015
+
+1. Base Layout
+2. Header
+3. Footer
+4. Merchandise
+5. Textbook Search
+6. Misc Print Styles
+*/
+
+/* 1. Base Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+/* Body */
+
+@page {
+    /* Avoid cutting off top, left, and right gutters */
+	margin: 30px 40px 10px 40px;
+}
+
+body {
+	font-size: 1.2rem !important;
+}
+.container {
+	width: 98%;
+}
+
+button.primary-button {
+	display: none;
+}
+
+a.primary-button {
+	display: none;
+}
+
+/* 2. Header
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+header {
+	display: none !important;
+}
+
+.logo {
+	margin: 0.5rem 0.5rem 0.5rem 0 !important;
+	height: 20px !important;
+	background-size: 150px !important;
+}
+
+.primary, #primary, .nav, .search-column, nav.secondary {
+	display: none;
+}
+
+@media (min-width: 0px) {
+	.small-nav {
+		display: none !important;
+	}
+	.search-icon {
+		display: none !important;
+	}
+}
+
+.breadcrumbs {
+	display: none !important;
+	margin-bottom: 0.4rem !important;
+}
+
+ul.breadcrumbs li a {
+	font-size: 1.0rem !important;
+}
+
+/* 3. Footer
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.footer-links, .enews, .contact {
+	display: none !important;
+}
+
+.grey-background {
+	background-color: #fff !important;
+	margin-top: 0 !important;
+}
+
+footer {
+	padding: 0 !important;
+    margin: 1rem 0 0.5rem 0rem;
+}
+
+.footer-links-container {
+    background-color: #FFF;
+}
+
+.small a {
+	font-size: 1rem !important;
+}
+
+.sf-minitoolbar {
+    display: none !important;
+}
+
+/* 4. Merchandise
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+img.bigbox {
+	z-index: -1;
+	position: relative;
+}
+
+@media (min-width: 550px) {
+	.print-inline {
+		display: inline-table;
+	}
+}
+
+/* 5. Textbook Search
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.course span, .course b, .course li {
+	font-size: 1.2rem !important;
+	font-weight: 400;
+}
+
+.course p {
+	margin-left: 1.6rem;
+	font-size: 1.2rem !important;
+}
+
+.course {
+    border-radius: 0;
+	margin-bottom: 0.5rem;
+    /* avoid breaking a page inside of a course block */
+}
+
+button.add-cart-button {
+	display: none;
+}
+
+.textbook-results-price-area {
+    display: none;
+}
+
+.textbook-results-price {
+    display: block !important;
+}
+
+.course-info {
+    page-break-inside: avoid;
+	padding: 0.8rem 1rem !important;
+	font-size: 1.4rem !important;
+	background-color: #EEE !important;
+    margin-bottom: 0;
+}
+
+.textbook-item {
+    page-break-inside: avoid;
+	margin: 0 !important;
+	padding: 0.8rem 1rem !important;
+	background-color: #FFF !important;
+	border-radius: 0;
+    border: none;
+    border-top: 1px #E0E0E0 solid;
+	color: #000;
+}
+
+span.textbook-results-title {
+    font-weight: 600;
+    margin: 0 0 0 0.2rem;
+}
+
+.textbook-results-author-and-skew {
+    margin: 0.4rem 0
+}
+
+.materials {
+    page-break-inside: avoid;
+	margin: 0 !important;
+	padding: 0.2rem 0.8rem !important;
+    background-color: #F7F7F7;
+    border-top: 1px #E0E0E0 solid;
+}
+
+ul.comments {
+	margin: 0.2rem;
+}
+
+.price {
+	color: #757575;
+	font-weight: 400 !important;
+}
+
+.results-buttons {
+	display: none !important;
+}
+
+.optional-tag {
+    opacity: 0.5;
+}
+
+/* 6. Misc. Print Styles
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.print-collapse {
+	display: none;
+}
+
+.print-no-left-margin {
+	margin-left :0 !important;
+}

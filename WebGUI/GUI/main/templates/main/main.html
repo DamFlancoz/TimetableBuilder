@@ -1,0 +1,155 @@
+{% extends "main/base.html" %}
+{% load static%}
+
+{% block header %}
+
+<link rel="stylesheet" href="{% static 'main/main.css' %}">
+
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="input-pane">
+
+    <h1> Input Place </h1>
+
+    <label for="term">Term</label>
+    <input name="term" type="number">
+
+    <br><br>
+
+    <label for="subj">Subject</label>
+    <input name="subj" list="subj" size=5>
+    <datalist id="subj">
+        <option value="AGEI">
+        <option value="ANTH">
+        <option value="ART">
+        <option value="AE">
+        <option value="AHVS">
+        <option value="ASTR">
+        <option value="BIOC">
+        <option value="BCMB">
+        <option value="BIOL">
+        <option value="BME">
+        <option value="BUS">
+        <option value="CS">
+        <option value="CHEM">
+        <option value="CYC">
+        <option value="CIVE">
+        <option value="HUFA">
+        <option value="COM">
+        <option value="CD">
+        <option value="CSC">
+        <option value="EDCI">
+        <option value="DR">
+        <option value="EOS">
+        <option value="ECON">
+        <option value="ED-D">
+        <option value="EDUC">
+        <option value="ECE">
+        <option value="ENGR">
+        <option value="ENGL">
+        <option value="ENT">
+        <option value="ER">
+        <option value="ES">
+        <option value="EUS">
+        <option value="EPHE">
+        <option value="FA">
+        <option value="FORB">
+        <option value="FRAN">
+        <option value="GNDR">
+        <option value="GEOG">
+        <option value="GMST">
+        <option value="GS">
+        <option value="GRS">
+        <option value="HINF">
+        <option value="HLTH">
+        <option value="HS">
+        <option value="HSTR">
+        <option value="HDCC">
+        <option value="ICDG">
+        <option value="IED">
+        <option value="IGOV">
+        <option value="IN">
+        <option value="INGH">
+        <option value="IS">
+        <option value="IET">
+        <option value="INTD">
+        <option value="IB">
+        <option value="INTS">
+        <option value="KINE">
+        <option value="LAS">
+        <option value="LAW">
+        <option value="LING">
+        <option value="MRNE">
+        <option value="MGB">
+        <option value="MBA">
+        <option value="MATH">
+        <option value="MECH">
+        <option value="MEDS">
+        <option value="MEDI">
+        <option value="MICR">
+        <option value="MUS">
+        <option value="NRSC">
+        <option value="NURS">
+        <option value="NUNP">
+        <option value="NUHI">
+        <option value="PAAS">
+        <option value="PHIL">
+        <option value="PHYS">
+        <option value="POLI">
+        <option value="PSYC">
+        <option value="ADMN">
+        <option value="PADR">
+        <option value="PHSP">
+        <option value="RHED">
+        <option value="RS">
+        <option value="SMGT">
+        <option value="SLST">
+        <option value="SDH">
+        <option value="SJS">
+        <option value="SOCW">
+        <option value="SOCI">
+        <option value="SENG">
+        <option value="SPAN">
+        <option value="STAT">
+        <option value="TS">
+        <option value="THEA">
+        <option value="VIRS">
+        <option value="WKEX">
+        <option value="WRIT">
+    </datalist>
+
+    <br><br>
+
+    <label for="num">Number</label>
+    <input name="num" min=100 max=999 size=5 oninput="alert(value)">
+
+    <br><br>
+
+    <button>Select Course </button>
+
+    <form action="/calcab" oninput="x.value=parseInt(a.value)">
+
+        <!-- Use jQuery slider -->
+        0
+        <input type="range" id="a1" name="a" value="0" min="0" max="24" step="1" class="dayTime-slider">
+        24 :
+        <output name="x" for="a">0</output>
+        <br><br>
+          
+    </form>
+
+</div>
+
+<div class="course-tabs">
+
+        <h1> I-Frames Place </h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus. Turpis egestas sed tempus urna. Pellentesque massa placerat duis ultricies lacus sed turpis tincidunt. Donec ultrices tincidunt arcu non sodales. Sit amet massa vitae tortor condimentum lacinia quis. Donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum. Sagittis purus sit amet volutpat consequat mauris nunc congue nisi. Congue quisque egestas diam in arcu cursus euismod. Rhoncus aenean vel elit scelerisque. Sem fringilla ut morbi tincidunt augue. Vitae sapien pellentesque habitant morbi tristique senectus et. Malesuada proin libero nunc consequat interdum. Ut sem viverra aliquet eget sit amet tellus cras adipiscing. Eget dolor morbi non arcu risus. Sagittis purus sit amet volutpat. Suspendisse ultrices gravida dictum fusce ut placerat orci. Nunc sed velit dignissim sodales. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
+
+        </p>
+
+</div>
+
+{% endblock content%}
