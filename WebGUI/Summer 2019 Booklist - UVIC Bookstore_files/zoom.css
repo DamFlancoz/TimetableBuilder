@@ -1,0 +1,217 @@
+/*
+Theme Name: ZOOM
+Description: CSS styles to override the default styling for zoom search.
+*/
+
+.highlight {
+    background: #FFFF40;
+}
+
+.searchheading {
+    font-size: 130%;
+    font-weight: bold;
+}
+
+.summary {
+
+}
+
+.suggestion {
+    font-size: 100%;
+}
+
+.results {
+    font-size: 100%;
+}
+
+.category {
+    color: #999999;
+}
+
+.sorting {
+    text-align: right;
+}
+
+.result_title {
+    font-size: 100%;
+}
+
+.description {
+    font-size: 100%;
+    color: #008000;
+}
+
+.context {
+    font-size: 100%;
+}
+
+.infoline {
+    font-size: 90%;
+    font-style: normal;
+    color: #808080;
+}
+
+.zoom_searchform {
+    font-size: 100%;
+    margin-bottom: 10px;
+    width: 440px;
+    border: 1px solid #FDDED7;
+    padding: 10px;
+    height: 70px;
+}
+
+.zoom_searchform label {
+    display: inline-block;
+    width: 80px;
+    text-align: left;
+    background-color: #fff;
+    font-weight: 600;
+}
+
+.zoom_results_per_page {
+    display: inline-block;
+    height: 30px;
+    font-size: 80%;
+}
+
+.zoom_results_per_page select {
+    width: 50px;
+    margin-right: 15px;
+}
+
+.zoom_match {
+    display: inline;
+    font-size: 80%;
+}
+
+.zoom_match label {
+    width: 23px;
+    margin-right: 0px;
+    padding-right: 0px;
+}
+
+.zoom_match label[for="zoom_match_any"] {
+    font-weight: 300;
+    width: 102px;
+}
+
+.zoom_match label[for="zoom_match_all"] {
+    font-weight: 300;
+    width: 110px;
+}
+
+.zoom_match input[type="radio"] {
+    margin-top: 5px;
+}
+
+.zoom_categories {
+    font-size: 80%;
+}
+
+.zoom_categories ul {
+    display: inline;
+    margin: 0px;
+    padding: 0px;
+}
+
+.zoom_categories li {
+    display: inline;
+    margin-left: 15px;
+    list-style-type: none;
+}
+
+input.zoom_button {
+}
+
+input.zoom_searchbox {
+}
+
+.result_image {
+    float: left;
+    display: block;
+}
+
+.result_image img {
+    margin: 10px;
+    width: 80px;
+    border: 0px;
+}
+
+.result_block {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    clear: left;
+}
+
+.result_altblock {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    clear: left;
+}
+
+.result_title a {
+    color: #369;
+    background-color: #fff;
+    font-size: 120%;
+    text-decoration: none;
+}
+
+.result_title a:hover {
+    color: #000;
+    border-bottom: 1px solid #369;
+}
+
+.result_pages {
+    font-size: 120%;
+    font-weight: 400;
+}
+
+.result_pages a {
+    background-color: #fff;
+}
+
+.result_pagescount {
+    font-size: 100%;
+}
+
+.searchtime {
+    font-size: 80%;
+}
+
+.recommended {
+    background: #DFFFBF;
+    border-top: 1px dotted #808080;
+    border-bottom: 1px dotted #808080;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.recommended_heading {
+    float: right;
+    font-weight: bold;
+}
+
+.recommend_block {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    clear: left;
+}
+
+.recommend_title {
+    font-size: 100%;
+}
+
+.recommend_description {
+    font-size: 100%;
+    color: #008000;
+}
+
+.recommend_infoline {
+    font-size: 80%;
+    font-style: normal;
+    color: #808080;
+}
+
+center {
+    display: none;
+}
