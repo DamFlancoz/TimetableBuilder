@@ -1,52 +1,196 @@
 
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #777;
+    margin:0;
+    padding:0;
+}
+
+body {
+    background-color: rgb(141, 141, 141);
+    background-image: url("timetable-back.jpeg");
+    background-size: cover;
+    background-blend-mode: multiply;
+
+    min-height: 100vh;
+    
+    display:grid;
+    grid-template-columns: minmax(0.5rem, 5vw) auto minmax(2rem, 1fr) auto minmax(0.5rem, 5vw);
+    grid-template-rows: auto 1fr auto 1fr auto;
+    grid-template-areas: 
+        "header header header header header"
+        ". . . . ."
+        ". main main main ."
+        " . . . . ."
+        "footer footer footer footer footer" ;       
+}
+
+
+
+/* Top and bottom bars, comman formatting */
+header, footer {
+    background-color: black;
+    font-size: 2rem;
+}
+
+header ul,footer ul{
+    list-style: none;
+    text-align: center;
+}
+
+header ul li, footer ul li{
+    display: inline-block;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+header ul li:hover, footer ul li:hover{
+    background-color: rgb(50, 50, 50);
+}
+
+
+/* body */
+header {grid-area: header;}
+
+header ul li{
+    padding: 1rem 1rem;
+    margin: 0rem 2rem;
+}
+
+
+
+
 main{
+    background-color: whitesmoke;
+    grid-area: main;
+
     display: grid;
     grid-template: auto / auto minmax(2rem,1fr) auto;
     grid-template-areas: "input . courses";
     background: none;
 }
 
+
+
+
+
+/* Input Pane */
 .input-pane{
-    background-color: aliceblue;
+    background-color: rgb(200,200,200);
+    border-radius: 1vh;
+
+    padding: 0.5rem 1.5rem;
+    margin: 0.5rem;
+
     grid-area: input; /* from main in base.css*/
 }
 
+button{
+    color:#555;
+    background-color: rgb(100, 206, 245,0.5);
+    padding: 0.4rem;
+    border-radius: 10px;
+    border: none;
+    position:relative;
+    left: calc(100% - 10rem);
+}
+
+button:hover{
+    background-color: rgb(100, 206, 245, 1);
+    cursor: pointer;
+}
+
+/* Table */
+.input-pane table td{
+    padding: 1rem 0rem;
+}
+
+/* Sliders */
 .dayTime-slider{
-    -webkit-appearance: none;  /* Override default CSS styles */
+    -webkit-appearance: none;  
     appearance: none;
-    width: 100%; /* Full-width */
-    height: 20px; /* Specified height */
-    background: #d3d3d3; /* Grey background */
-    outline: none; /* Remove outline */
-    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    width: calc(100%-5rem); 
+    height: 5px; 
+    background: #eee;
+    outline: none; 
+    opacity: 0.6; 
+    -webkit-transition: .2s; 
     transition: opacity .2s;
 }
 
-/* Mouse-over effects */
 .dayTime-slider:hover {
-    opacity: 1; /* Fully shown on mouse-over */
+    opacity: 1; 
 }
 
-/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
 .dayTime-slider::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Override default look */
+    -webkit-appearance: none; 
     appearance: none;
-    width: 20px; /* Set a specific slider handle width */
-    height: 20px; /* Slider handle height */
+    width: 20px; 
+    height: 20px; 
     border-radius: 50%; 
-    background: rgb(71, 198, 236); /* Green background */
-    cursor: pointer; /* Cursor on hover */
+    background: rgb(71, 198, 236); 
+    cursor: pointer; 
 }
 
 .dayTime-slider::-moz-range-thumb {
-width: 25px; /* Set a specific slider handle width */
-height: 25px; /* Slider handle height */
-background: #4CAF50; /* Green background */
-cursor: pointer; /* Cursor on hover */
+width: 25px; 
+height: 25px; 
+background: #4CAF50; 
+cursor: pointer; 
 }
 
+
+
+
+
+/* Course Tabs */
 .course-tabs{
-    background-color: aquamarine;
     grid-area: courses; /* from main in base.css*/
+}
+
+.tab-panels ul {
+    margin: 0;
+    padding: 0;
+}
+.tab-panels ul li {
+    list-style-type: none;
+    display: inline-block;
+    background: #999;
+    margin: 0;
+    padding: 3px 10px;
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+    font-weight: 200;
+    cursor: pointer;
+
+}
+.tab-panels ul li:hover {
+    color: #fff;
+    background: #666;
+}
+
+.tab-panels ul li.active {
+    color: #fff;
+    background: #666;
+}
+
+.tab-panels .panel {
+    display:none;
+    background: #c9c9c9;
+    padding: 30px;
+    border-radius: 0 0 10px 10px;
+}
+
+.tab-panels .panel.active {
+    display:block;
+}
+
+
+
+
+footer{grid-area: footer;}
+
+footer ul li{
+    padding: 0rem 0.5rem;
+    margin: 0.5rem 0rem;
 }
