@@ -68,9 +68,12 @@ return sample
 }
 '''
 def cInfoApi(request):
+    
     term = request.GET['term']
     cName = request.GET['cName']
     cNum = request.GET['cNum']
+
+    print([term,cName,cNum])
 
     data = {
         'html':'content<br/>content<br/>content<br/>content<br/>content',

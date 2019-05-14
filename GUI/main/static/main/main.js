@@ -122,7 +122,13 @@ $(function() {
     $tables = $('#tables');
     $messages = $('#messages')
 
+    // Initialize some events
 
+    //close button
+    $('.tab-panels .tabs li .close').on('click',closeTab);
+    
+    // For Tabs switching 
+    $('.tab-panels .tabs li').on('click', ToggleTab);
 
     //Reset button
     $('#reset').on('click', function() {
@@ -169,46 +175,7 @@ $(function() {
             $start.val($(this).val()).trigger('input');
         }
     });
-
     
-    
-    // For Tabs switching 
-    $('.tab-panels .tabs li').on('click', ToggleTab);
-    
-    function ToggleTab() {
-
-        var $panel = $(this).closest('.tab-panels');
-        
-    
-        $panel.find('.tabs li.active').removeClass('active');
-        $(this).addClass('active');
-    
-        //figure out which panel to show
-        var panelToShow = $(this).attr('rel');
-    
-        //hide current panel if exists (might not at start)
-        var $activePanel = $panel.find('.panel.active')
-        
-        if ($activePanel[0]){
-
-            $activePanel.hide(0, showNextPanel);
-        
-        } else {
-            showNextPanel();
-        }
-
-        //show next panel
-        function showNextPanel() {
-            $(this).removeClass('active');
-    
-            $('#'+panelToShow).show(0, function() {
-                $(this).addClass('active');
-            });
-        }
-    };
-
-
-
     // Select course and put in tabs
     $('#select-course').on('click', function() {
 
@@ -258,12 +225,20 @@ $(function() {
 
     });
 
+    // adds tab 
     function addTab($tabPanels,header,content) {
 
         selectedCourses.push([$cName.val(), $cNum.val()]);
 
         // create
         var $tab = $("<li></li>").text(header).attr({rel:header.replace(' ','-')}).on('click',ToggleTab);
+
+        // add close button
+        $tab.append($('<span>').addClass('close').on('click',function() {
+            $tab = $(this).closest('li');
+            $('#'+$tab.attr('rel')).remove();
+            $tab.remove();
+        }));
 
         // add tab
         $tabPanels.find('.tabs').append($tab);
@@ -275,6 +250,59 @@ $(function() {
 
         $tab.click();
     }
+
+    // changes tabs when clicked
+    function ToggleTab() {
+
+        var $panel = $(this).closest('.tab-panels');
+        
+    
+        $panel.find('.tabs li.active').removeClass('active');
+        $(this).addClass('active');
+    
+        //figure out which panel to show
+        var panelToShow = $(this).attr('rel');
+    
+        //hide current panel if exists (might not at start)
+        var $activePanel = $panel.find('.panel.active')
+        
+        if ($activePanel[0]){
+
+            $activePanel.hide(0, showNextPanel);
+        
+        } else {
+            showNextPanel();
+        }
+
+        //show next panel
+        function showNextPanel() {
+            $(this).removeClass('active');
+    
+            $('#'+panelToShow).show(0, function() {
+                $(this).addClass('active');
+            });
+        }
+    };
+
+    // closes tabs when clicked close
+    function closeTab() {
+        $tab = $(this).closest('li');
+
+        // show another tab if tab was active
+        if ($tab.hasClass('active')){
+
+            if ($tab.next()[0]){
+
+                $tab.next().trigger('click');
+
+            } else {
+                $tab.prev().trigger('click');
+            }
+        }
+
+        $('#'+$tab.attr('rel')).remove();
+        $tab.remove();
+    };
 
     //post error message
     function postError(error){

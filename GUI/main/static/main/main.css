@@ -2,6 +2,7 @@
 * {
     /* rgb(71, 198, 236); */
     --button-theme: rgb(51, 181, 228);
+    --hover: rgb(50, 50, 50);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #777;
     margin:0;
@@ -17,7 +18,7 @@ body {
     min-height: 100vh;
     
     display:grid;
-    grid-template-columns: minmax(0.5rem, 5vw) auto minmax(2rem, 1fr) auto minmax(0.5rem, 5vw);
+    grid-template-columns: minmax(3px, 5vw) auto minmax(2rem, 1fr) auto minmax(3px, 5vw);
     grid-template-rows: auto 1fr auto 1fr auto;
     grid-template-areas: 
         "header header header header header"
@@ -47,7 +48,7 @@ header ul li, footer ul li{
 }
 
 header ul li:hover, footer ul li:hover{
-    background-color: rgb(50, 50, 50);
+    background-color: var(--hover);
 }
 
 
@@ -67,7 +68,7 @@ main{
     grid-area: main;
 
     display: grid;
-    grid-template: auto / auto minmax(2rem,1fr) auto;
+    grid-template: auto / auto minmax(3px,1fr) auto;
     grid-template-areas: "input . courses";
     background: none;
 }
@@ -155,7 +156,7 @@ cursor: pointer;
 
 
 
-/* Course Tabs */
+/* Course Tabs/Table Tabs */
 .course-tabs{
     grid-area: courses; /* from main in base.css*/
 }
@@ -174,8 +175,29 @@ cursor: pointer;
     color: #fff;
     font-weight: 200;
     cursor: pointer;
+}
+
+.tab-panels ul li .close {
+    display: block;
+    float: right;
+    
+    background-color: red;
+    opacity: 0.7;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+
+    position: relative; 
+    right: -5px;
+    bottom: -7px;
 
 }
+
+.tab-panels ul li .close:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+
 .tab-panels ul li:hover {
     color: #fff;
     background: #666;
@@ -184,6 +206,7 @@ cursor: pointer;
 .tab-panels ul li.active {
     color: #fff;
     background: #666;
+    cursor: default;
 }
 
 .tab-panels .panel {

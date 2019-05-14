@@ -1,4 +1,5 @@
 from urllib.request import urlopen
+from bs4 import BeautifulSoup as bSoup
 #from Exceptions import *
 
 '''
@@ -28,61 +29,6 @@ def getPage(TERM,course):
     return htmlPage 
 
 
-'''
-Tests: getPage with CSC 111, 2019 Jan-Apr term
-Puts: out a.html
-'''
-def Test_getPage():
-    
-    #Expected output check
-    with open('TestOutWebScrapper.html','w') as t:
-        t.write(getPage('201901',Course('CSC','111')))
-    
-    print('Check TestOutWebScrapper.html for CSC 111 info')
-    
-    #Page not available cases check
-    #C1SC 111 and math 101 in 201902 give a little different pages
-    try:
-        getPage('201901',Course('C1SC','111'))        
-        
-        print('Exception not Working')
-            
-    except NoSectionsAvailable as e:
-        #print(e)
-        print('Exception Works for C1SC 111')
-        
-    except:
-        print('Unexpected exception thrown')
-        
-    #Math 101 not in summer 2019
-    try:
-        
-        getPage('201902',Course('MATH','101'))             
-        print('Exception not Working')
-            
-    except NoSectionsAvailable as e:
-        #print(e)
-        print('Exception Works')
-   
-    except :
-        print('Unexpected exception thrown')
 
-        
-    
-        
-
-
-if __name__=='__main__':
-    
-    from Course_Section_Classes import Course
-    Test_getPage()
-    
-    '''
-    Expected Output:
-        
-    Check TestOutWebScrapper.html for CSC 111 info
-    Exception Works for C1SC 111
-    Exception Works
-    '''
 
 

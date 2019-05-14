@@ -125,23 +125,46 @@
 
             <div class="course-tabs">
 
-                <h1> I-Frames Place </h1>
-
                 <!-- Courses-tab Place -->
                     
                 <div class="tab-panels" id="cInfo">
                     <ul class="tabs">
-
+                        <li rel="MATH-101" class="active">MATH 101<span class="close"></span></li>
+                        <li rel="MATH110">MATH 110<span class="close"></span></li>
                     </ul>
 
+                    <div id="MATH-101" class="panel active">
+                        <label for='instructors'>Choose Instructor(s):&nbsp</label>
+                        <input type='checkbox' name="instructors" id="instructors">Inst1&nbsp</input>
+                        <input type='checkbox' name="instructors" id="instructors">Inst2&nbsp</input>
+                        <input type='checkbox' name="instructors" id="instructors">Inst3&nbsp</input>
+
+                        <br><br>
+
+                        <label for='modeSectionSelection'>Mode:&nbsp</label>
+                        <input type='radio' name="modeSectionSelection" id="modeSectionSelection">Only use selected&nbsp</input>
+                        <input type='radio' name="modeSectionSelection" id="modeSectionSelection">Don't use selected&nbsp</input>
+                    </div>
+
+                    <div id="MATH-110" class="panel">
+                        &Tab;&Tab;&Tab;&Tab;&Tab;<br>
+                        &Tab;&Tab;&Tab;&Tab;&Tab;<br>
+                        &Tab;&Tab;&Tab;&Tab;&Tab;<br>
+                        &Tab;&Tab;&Tab;&Tab;&Tab;<br>
+                        &Tab;&Tab;&Tab;&Tab;&Tab;<br>
+
+                    </div>
+
                 </div>
+
+                <br>
 
 
                 <!-- TimeTables Place -->
                 <div class="tab-panels" id="tables">
                     <ul class="tabs">
-                        <li rel="panel5" class="active">panel5</li>
-                        <li rel="panel6">panel6</li>
+                        <li rel="panel5" class="active">panel5<span class="close"></span></li>
+                        <li rel="panel6">panel6<span class="close"></span></li>
                     </ul>
 
                     <div id="panel5" class="panel active">
