@@ -73,10 +73,8 @@ def cInfoApi(request):
     cName = request.GET['cName']
     cNum = request.GET['cNum']
 
-    print([term,cName,cNum])
-
     data = {
-        'html':'content<br/>content<br/>content<br/>content<br/>content',
+        'html':render_to_string('TableBuilder/coursePanel.html'),
         'course': cName + ' ' + cNum   
     }
 

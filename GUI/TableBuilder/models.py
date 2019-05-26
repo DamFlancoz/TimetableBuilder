@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Sections(models.Model):
 
     # can access course through s.course_set.all()/.filter etc

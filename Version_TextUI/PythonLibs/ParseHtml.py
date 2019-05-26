@@ -6,16 +6,16 @@ Python3 gives error if you try to use import <class> to reach module in same
 directory
 '''
 if __name__=='PythonLibs.ParseHtml':
-    
+
     from PythonLibs.Course_Section_Classes import *
 
 '''
 takes: term and Course Object
 returns: same Course Object with info filled in
 '''
-def getCourse(course,coursePageHtml):
-    
-    pageSoup = bSoup(coursePageHtml,'lxml')       # parsed html, soup
+def getCourse(course,course_page_html):
+
+    pageSoup = bSoup(course_page_html,'lxml')       # parsed html, soup
 
     '''
     Gives back table of all classes and other tables in list. [0] takes needed
@@ -36,7 +36,7 @@ def getCourse(course,coursePageHtml):
     for i in range(0,len(sectionList),4):
         if 'Main Campus' in str(sectionList[i+1]):
             section = Section()
-            
+
             titleList = str(sectionList[i]).split(' - ')
             section.section = titleList[3][:3] #some tags were also coming at the end
             section.crn = titleList[1]
@@ -69,9 +69,9 @@ def Test_getCourse():
     '''
 
     with open('TestParserPage_CSC111Spring2019.html','r') as t:
-        coursePageHtml = t.read()
-  
-    getting = getCourse(Course('CSC','111'),coursePageHtml) #returns Course object
+        course_page_html = t.read()
+
+    getting = getCourse(Course('CSC','111'),course_page_html) #returns Course object
 
     expected ='''Course: CSC 111
 Lectures:
@@ -83,11 +83,11 @@ Labs:
 	Course: CSC 111 | Section: B03 | Time: (15.5, 17.5) | Days: W
 Tutorials:
 '''
-    
+
     return str(getting) == expected
 
 if __name__=='__main__':
-    
+
     from Course_Section_Classes import *
     print (Test_getCourse())
 

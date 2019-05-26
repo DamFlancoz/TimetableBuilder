@@ -1,0 +1,23 @@
+Tables:
+- List of 'Table' Data structure
+
+Table:
+- 2-D list 
+- Each element represents a day in week,
+	i.e. [Monday,Tuesday,Wednesday,Thursday,Friday]
+- Each day is a list of 'Section'
+	i.e. [['Section's],['Section's],['Section's],['Section's],['Section's]]
+
+Section:
+- Dictionary with following data
+            section['section']      eg. 'A01','T05'
+            section['crn'] 
+            section['time']         eg. '11:30 am - 1:20 pm'
+            section['days']         eg. 'W','MR'
+            section['place']        eg. 'Engineering Comp Science Bldg 242'
+            section['instructor']   eg. 'TBA'
+            section['type']         eg. 'Lab','Lecture','Tutorial'
+
+Course:
+- Dictionary containing labs, lectures, tutorials
+- Each contain list of 'Section's for each.

@@ -84,7 +84,7 @@ $(function() {
                 error:postError('conection error'),
                 data: {
                     'selectedCourses':selectedCourses,
-                    
+
                     'dayConstr':[
                         [parseInt($Mstart.val()),parseInt($Mend.val())],
                         [parseInt($Tstart.val()),parseInt($Tend.val())],
@@ -116,7 +116,7 @@ $(function() {
     $Wend = $('#Wend')
     $Rend = $('#Rend')
     $Fend = $('#Fend')
-    
+
     //Cashing course-info window and tables window
     $cInfo = $('#cInfo');
     $tables = $('#tables');
@@ -126,8 +126,8 @@ $(function() {
 
     //close button
     $('.tab-panels .tabs li .close').on('click',closeTab);
-    
-    // For Tabs switching 
+
+    // For Tabs switching
     $('.tab-panels .tabs li').on('click', ToggleTab);
 
     //Reset button
@@ -157,7 +157,7 @@ $(function() {
 
         //get relative end slider
         $end = $('#' + $(this).attr('id').substr(0,1) + 'end');
-        
+
         // if less put it equal
         if (parseInt($(this).val()) > parseInt($end.val())){
             $end.val($(this).val()).trigger('input');
@@ -165,17 +165,17 @@ $(function() {
     });
 
     $('.dayTime-slider.end').on('input', function() {
-        
+
         //get relative start slider
         $start = $('#' + $(this).attr('id').substr(0,1) + 'start');
-        
+
         // if more put it equal
         if (parseInt($(this).val()) < parseInt($start.val())){
 
             $start.val($(this).val()).trigger('input');
         }
     });
-    
+
     // Select course and put in tabs
     $('#select-course').on('click', function() {
 
@@ -183,7 +183,7 @@ $(function() {
 
         // check if course is already there
         var alreadyIn = selectedCourses.reduce((prev,curr)=>{
-            
+
             return prev || ($cName.val() === curr[0] && $cNum.val() === curr[1]);
 
         }, false);
@@ -200,7 +200,7 @@ $(function() {
 
         } else if (alreadyIn){
             postError('alreadyIn');
-        
+
         } else {
 
             $.ajax({
@@ -212,23 +212,20 @@ $(function() {
                     'cNum':parseInt($cNum.val())
                 },
                 success: (data) => {
-                    addTab($cInfo,data.course,data.html);
+
+                    selectedCourses.push([$cName.val(), $cNum.val()]);
+                    addTab($cInfo,data.name,data.html);
                 },
                 error: (data) =>{
                     postError('connection-error')
                 }
             })
-
-            // addTab($cInfo, $cName.val() + ' ' + $cNum.val(),
-            //     'content<br/>content<br/>content<br/>content<br/>content');
         }
 
     });
 
-    // adds tab 
+    // adds tab
     function addTab($tabPanels,header,content) {
-
-        selectedCourses.push([$cName.val(), $cNum.val()]);
 
         // create
         var $tab = $("<li></li>").text(header).attr({rel:header.replace(' ','-')}).on('click',ToggleTab);
@@ -236,13 +233,13 @@ $(function() {
         // add close button
         $tab.append($('<span>').addClass('close').on('click',function() {
             $tab = $(this).closest('li');
-            $('#'+$tab.attr('rel')).remove();
-            $tab.remove();
+
+            closeTab();
         }));
 
         // add tab
         $tabPanels.find('.tabs').append($tab);
-        
+
         var $panel = $('<div></div>').addClass('panel').attr({id:header.replace(' ','-')}).html(content);
 
         //create and add panel
@@ -255,21 +252,21 @@ $(function() {
     function ToggleTab() {
 
         var $panel = $(this).closest('.tab-panels');
-        
-    
+
+
         $panel.find('.tabs li.active').removeClass('active');
         $(this).addClass('active');
-    
+
         //figure out which panel to show
         var panelToShow = $(this).attr('rel');
-    
+
         //hide current panel if exists (might not at start)
         var $activePanel = $panel.find('.panel.active')
-        
+
         if ($activePanel[0]){
 
             $activePanel.hide(0, showNextPanel);
-        
+
         } else {
             showNextPanel();
         }
@@ -277,7 +274,7 @@ $(function() {
         //show next panel
         function showNextPanel() {
             $(this).removeClass('active');
-    
+
             $('#'+panelToShow).show(0, function() {
                 $(this).addClass('active');
             });
@@ -304,6 +301,9 @@ $(function() {
         $tab.remove();
     };
 
+    // close course Tab
+
+
     //post error message
     function postError(error){
         // create message, marked with error (class alreadyIn)
@@ -317,14 +317,14 @@ $(function() {
             case 'invalidNum':
                 $message.text('No. is invalid');
                 break;
-            
+
             case 'numNotGiven':
                 $message.text('No. not given');
                 break;
 
             case 'connection-error':
                 $message.text('Error Ocurred in connecting to back-end');
-            
+
         }
 
         //Post it to user

@@ -1,3 +1,6 @@
+'''
+This module contains all the classes used.
+'''
 
 class Table:
 
@@ -35,15 +38,6 @@ class Table:
     def __str__(self): #TODO: imporve this
 
         # course_rep eg. [13,14,'CSC111','A01']
-        '''
-        return ''+'\n\n-'.join([ '\n '.join([ '(' + str(course_rep[0]) + ','
-                                             +str(course_rep[1]) + ') '
-                                             +'\n\t'.join([str(i)
-                                                           for i in course_rep[2:]])
-                                         for course_rep in self[day]])
-                                for day in 'MTWRF'])
-        '''
-
         return '\n'.join(day +': '+str(table)[1:-1] for day,table in zip('MTWRF',self))
 
     def addPddingCourses(self):
@@ -54,22 +48,17 @@ class Table:
             day[0].time = (0,0)
             day[1].time = (24,24)
 
-
-
-'''
-Can be compared to [course,num] or Course objects
-'''
 class Course:
 
-    def __init__(self,course,num,lectures=[],labs=[],tutorials=[]):
+    def __init__(self,course,num):
 
         self.name = course
         self.num = num
 
         #Contain Section objects
-        self.lectures = lectures
-        self.labs = labs
-        self.tutorials = tutorials
+        self.lectures = []
+        self.labs = []
+        self.tutorials = []
 
     def __eq__(self,course):
 
@@ -190,3 +179,35 @@ class Section:
             time[i] = t[0]
 
         self.time = tuple(time)
+
+# Exceptions
+
+'''
+Raised if the Uvic says sections for course are not available.
+Used in WebScrapper
+'''
+class NoSectionsAvailableOnline(Exception):
+
+    def __init__(self,course):
+        super().__init__('')
+        self.course=course
+
+
+'''
+raised if no sections of a type can fit due to inputed time constraints
+eg. you cannot enter any tutroial of Engr 141 because they are all at night
+    and you said you dont want any night stuff.
+'''
+class NoSectionOfTypeFit(Exception):
+
+    def __init__(self,course):
+        super().__init__('')
+        self.course=course
+
+
+'''
+Raised if a section doesnot fit in a timetable
+Used in EvalTable. Not an error.
+'''
+class NotFit(Exception):
+    pass

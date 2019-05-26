@@ -2,7 +2,7 @@
 TODO:
 - add validation for inputs in all methods
 - add conditons in making table eg. start day at 10am
-- repeated adding bug with mah101 and csc115, different 
+- repeated adding bug with mah101 and csc115, different
   adding incase of csc115,math101 amd math101,csc115
   intial table is fine but after end at 15 problem appears
 
@@ -61,11 +61,11 @@ from PythonLibs.Course_Section_Classes import Table,Course
 '''
 All Exceptions defined here
 
-NoSectionsAvailable(course) - Raised by getPage() from WebScrapper when no section for 
+NoSectionsAvailableOnline(course) - Raised by getPage() from WebScrapper when no section for
     Course object are found
 NotFit - Raised if a section does not fit in table
 '''
-from PythonLibs.Exceptions import NoSectionsAvailable,NoSectionOfTypeFit
+from PythonLibs.Exceptions import NoSectionsAvailableOnline,NoSectionOfTypeFit
 
 
 '''
@@ -82,7 +82,7 @@ return - term value equal accordingly
 '''
 def setTerm(inp):
     if ('next' in inp) or ('n' in inp):
-                
+
         # gives tuple (year,month,date,h,min,s,weekday, etc.)
         time = localtime()
 
@@ -166,7 +166,7 @@ Use
 - End <MR or all> at 10
 - Show, to see selected courses
 - Calc to Calculate all the tables
-- ShowTable to see tables (TODO) 
+- ShowTable to see tables (TODO)
 - Quit to quit
 ''')
 
@@ -180,7 +180,7 @@ while True:
 
         #remove command word and get the argument
         inp = inp.replace('term','').strip()
-        
+
         try:
             term = setTerm(inp)
         except:
@@ -191,7 +191,7 @@ while True:
 
         #removes command word and makes list of arguments
         inp = inp.replace('add','').split(',')
-        
+
         for course in inp:
 
             course = processArgToCourse(course.strip()) # returns [name,number]
@@ -204,7 +204,7 @@ while True:
 
         #removes command word and makes list of arguments
         inp = inp.replace('remove','').replace('rem','').replace('rmv','').split(',')
-                 
+
         for course in inp:
 
             course = processArgToCourse(course.strip()) # evalCourse returns [name,number]
@@ -218,12 +218,12 @@ while True:
         print (term + ': ',end = '')
 
         for course in selectedCourses:
-            print (course.course,course.num+',',end='')
+            print (course.name,course.num+',',end='')
 
         print() #moves cursor to next line
         print(i+': '+str(dayLengths[i]) for i in dayLengths)
 
-    elif 'start' in inp and 'at' in inp: 
+    elif 'start' in inp and 'at' in inp:
         inp = inp.split(' ')
 
         if inp[1] == 'all':
@@ -241,7 +241,7 @@ while True:
                 for day in inp[1].upper():
                     dayLengths[day][0] = int(inp[3])
 
-    elif 'end' in inp and 'at' in inp: 
+    elif 'end' in inp and 'at' in inp:
         inp = inp.split(' ')
 
         if inp[1] == 'all':
@@ -261,36 +261,36 @@ while True:
 
     # Evaluates TimeTable
     elif ('calc' in inp) or ('eval table' in inp) or ('get tables' in inp):
-        
+
         # Adds course info from web to Course Object
         try:
             selectedCourses = [getCourse(course,getPage(term,course)) for course in selectedCourses]
-        
+
             tables = evalTable(selectedCourses,dayLengths)
-        
-        except NoSectionsAvailable as e:
-            
+
+        except NoSectionsAvailableOnline as e:
+
             selectedCourses.remove(e.course)
-            
-            print(e.course.course,e.course.num,'is not available in',term)
+
+            print(e.course.name,e.course.num,'is not available in',term)
             print('Removed the course.')
             print('You may want to add a replacement course.')
 
         except NoSectionOfTypeFit as e:
 
             print('Current time restrictions dont allow you to take all classes of',
-                   e.course.course,e.course.num)
+                   e.course.name,e.course.num)
             print('Change the Time restrictions or remove the course')
 
     elif 'showtable' in inp:
-        
+
         #TODO
 
         print(tables[0])
 
-    # Exits program            
+    # Exits program
     elif inp in ['quit','exit','q','done']:
-        
+
         break
 
     # Excecutes a python command or deems input invalid
@@ -299,4 +299,4 @@ while True:
 
 
 
-    
+

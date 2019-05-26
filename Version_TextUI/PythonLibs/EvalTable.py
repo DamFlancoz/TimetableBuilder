@@ -22,7 +22,7 @@ if not __name__ == '__main__': from .Exceptions import NotFit,NoSectionOfTypeFit
 
 
 '''
-Contains all the classes  
+Contains all the classes
 '''
 if not __name__ == '__main__': from .Course_Section_Classes import Table,Course,Section
 
@@ -54,18 +54,18 @@ def insertInTable(section,table):
         #inserting in free day
         if table[day]==[]:
             table[day].insert(0,toInsert)
-    
+
         #inserting at start of day
         elif table[day][0][0] >= time[1]:
             table[day].insert(0,toInsert)
-            
+
         else:
             #inserting during the day
             for i in range(len(table[day])-1):
                 if table[day][i][1] <= time[0] and table[day][i+1][0] >= time[1]:
                     table[day].insert(i+1,toInsert)
                     break
-    
+
             #inserting at end of day
             else:
                 if table[day][-1][1] <= time[0]:
@@ -74,7 +74,7 @@ def insertInTable(section,table):
                     raise NotFit()
 
     table.sections.append([section])
-    
+
     return table
 
 '''
@@ -91,12 +91,12 @@ def insertSameInTable(section,table):
         if table[day][i][0] == time[0] and time[1] == table[day][i][1]:
             table[day][i].append(section.section)
             break
-    
+
     for s in table.sections:
         if s[0] == section:
             s.append(section)
             break
-     
+
     return table
 
 def evalTable(selectedCourses,dayLengths):
@@ -105,22 +105,22 @@ def evalTable(selectedCourses,dayLengths):
 
     #Acts as buffer for new tables made in each type for each section
     newTables={}
-    
+
     for course in selectedCourses:
         for Type in course:
             for section in Type:
-                
+
                 # skip if class falls out of required schedule
                 if not checkSectionWithDayLengths(section,dayLengths): continue
-                    
+
                 for i,t in enumerate(tables):
 
-                    
+
 
                     # i is in newTables[(time,section.days,i)] so that a section does keep puting itself
                     #  eg 'A01' in next iterations of tables sees its previous entry in new tables and puts
                     #      itself wih it again.
-                    # But it allows other section with same day and time to find the table 
+                    # But it allows other section with same day and time to find the table
 
                     #[start,end] eg [11,13.5] for'11am-1:20pm'
                     time = section.time
@@ -132,19 +132,19 @@ def evalTable(selectedCourses,dayLengths):
                             table = insertInTable(section,table)
 
                             newTables[(time,section.days,i)]= table
-                            
+
                         except NotFit:
                             continue
                     else:
                         newTables[(time,section.days,i)] = insertSameInTable(section,newTables[(time,section.days,i)])
-                        
+
             # if no section of a type can be added then
             if  (not newTables) and Type: raise NoSectionOfTypeFit(course)
-            
+
             # If at start a Type is [] it makes table [] in comprehension
-            # but you want it to remain a free table (default value) so loop 
+            # but you want it to remain a free table (default value) so loop
             # for tables can run.
-                        
+
             tables = list(newTables.values()) if newTables else tables
             newTables = {}
 
@@ -159,7 +159,7 @@ system or IDE
 '''
 
 def Test_evalTable():
-        
+
     coursesInfo = {'MATH200': {'labs': [],
       'lectures': [{'type': 'Lecture',
     'section': 'A01',
@@ -225,20 +225,20 @@ def Test_evalTable():
     'time': '3:30 pm - 4:20 pm',
     'instructor': 'TBA',
     'crn': '22045'}]}}
-    
+
     selectedCourses=[Course('MATH','200'),Course('MATH','204')]
 
     # 6 tables by default
     # R 17 rejects 2
     # T 16.5 is on border but doesnt reject any
     dayLengths = {'M':(0,24),'T':(0,16.5),'W':(0,24),'R':(0,17),'F':(0,24)}
-    
+
     # puts info in Course objects
     for course in selectedCourses:
-        for Type in coursesInfo[course.course+course.num]:
-            for section in coursesInfo[course.course+course.num][Type]:
+        for Type in coursesInfo[course.name+course.num]:
+            for section in coursesInfo[course.name+course.num][Type]:
                 s = Section()
-                s.cName = course.course
+                s.cName = course.name
                 s.cNum = course.num
                 s.section = section['section']
                 s.days = section['days']
@@ -246,9 +246,9 @@ def Test_evalTable():
                 s.setTime(section['time'])
                 s.instructor = section['instructor']
                 s.crn = section['crn']
-    
+
                 exec('course.'+Type+'.append(s)')
-    
+
 
     # The tables should be following.
     # They are a set beacause order does not matter.
@@ -273,14 +273,14 @@ def Test_evalTable():
       ((8.5, 9.5, 'MATH204', 'A02'),),
       ((8.5, 12, 'MATH200', 'A01'),),
       ((8.5, 9.5, 'MATH204', 'A02'), (14.5, 15.5, 'MATH204', 'T03')))}
-    
+
     tables = evalTable(selectedCourses,dayLengths)
-    
+
     # show all 6 tables
     for table in tables:
         print (table)
         print()
-    
+
     # this line takes considerable time
     return 'Pass' if expected == set(deepTuple(tables)) else 'Error'
 
@@ -296,15 +296,15 @@ def deepTuple(t):
 
 
 if __name__ == '__main__' :
-    
-    
+
+
     from Exceptions import NotFit
 
     from Course_Section_Classes import Table,Course,Section
 
     print (Test_evalTable())
 
-    
+
 
 
 
