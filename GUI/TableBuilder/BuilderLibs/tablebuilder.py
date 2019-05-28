@@ -8,10 +8,6 @@ from time import localtime  # for seting term
 
 from .classes import Table, Course, Section, NotFit, NoSectionOfTypeFit
 
-
-term = "201901"
-
-
 def eval_table(selected_courses, day_lengths):
 
     tables = [Table()]  # free weekby default
@@ -156,36 +152,28 @@ def set_term(inp):
     return - term value equal accordingly
     '''
 
+    # gives tuple (year,month,date,h,min,s,weekday, etc.)
+    time = localtime()
+
     if ("next" in inp) or ("n" in inp):
 
-        # gives tuple (year,month,date,h,min,s,weekday, etc.)
-        time = localtime()
-
-        if time[1] in [1, 2, 3, 4]:  # next term from may
-            term = str(time[0]) + "05"
-
-        elif time[1] in [5, 6, 7, 8]:  # next term from sept
-            term = str(time[0]) + "09"
-
-        else:  # next term from jan
-            term = str(time[0] + 1) + "01"
+        time[1] = 1 if time[1]+4 == 13 else time[1]+4
 
     elif ("current" in inp) or ("curr" in inp):
-
-        # gives tuple (year,month,date,h,min,s,weekday, etc.)
-        time = localtime()
-
-        if time[1] in [1, 2, 3, 4]:  # next term from jan
-            term = str(time[0]) + "01"
-
-        elif time[1] in [5, 6, 7, 8]:  # next term from may
-            term = str(time[0]) + "05"
-
-        else:  # current term from sept
-            term = str(time[0]) + "09"
+        pass
 
     elif inp.isdigit() and len(inp) == 6:
-        term = inp
+        return inp
+
+    # set term according to time given
+    if time[1] in [1, 2, 3, 4]:  # next term from jan
+        term = str(time[0]) + "01"
+
+    elif time[1] in [5, 6, 7, 8]:  # next term from may
+        term = str(time[0]) + "05"
+
+    else:  # current term from sept
+        term = str(time[0]) + "09"
 
     return term
 

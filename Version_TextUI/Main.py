@@ -23,7 +23,7 @@ getCourse(term,course,courseNo)
 
 returns - course dictionary
 
-Stores with key = selectedCourses[i][0]+selectedCourses[i][1]
+Stores with key = selected_courses[i][0]+selected_courses[i][1]
 eg. 'MATH101'
 
 Parses html to get all information
@@ -39,12 +39,12 @@ from PythonLibs.ParseHtml import getCourse
 
 
 '''
-evalTable(selectedCourses,Courseinfo,tables)
+eval_table(selected_courses,Courseinfo,tables)
 
 Changes var tables to have tables without conflicts of
-selectedCourses in it.
+selected_courses in it.
 '''
-from PythonLibs.EvalTable import evalTable
+from PythonLibs.EvalTable import eval_table
 
 
 '''
@@ -76,11 +76,11 @@ from time import localtime
 
 
 '''
-setTerm
+set_term
 takes - input argument for term and
 return - term value equal accordingly
 '''
-def setTerm(inp):
+def set_term(inp):
     if ('next' in inp) or ('n' in inp):
 
         # gives tuple (year,month,date,h,min,s,weekday, etc.)
@@ -135,9 +135,9 @@ def processArgToCourse(i):
 
 ############################## Global Variables
 
-term = setTerm('curr')# term chosen
-selectedCourses = []  # Course objects
-dayLengths = {'M':[0,24],'T':[0,24],'W':[0,24],'R':[0,24],'F':[0,24]}
+term = set_term('curr')# term chosen
+selected_courses = []  # Course objects
+day_lengths = {'M':[0,24],'T':[0,24],'W':[0,24],'R':[0,24],'F':[0,24]}
 
 '''
 tables stores list of table elements
@@ -182,7 +182,7 @@ while True:
         inp = inp.replace('term','').strip()
 
         try:
-            term = setTerm(inp)
+            term = set_term(inp)
         except:
             print('Term takes an input; next, current or termcode')
 
@@ -196,8 +196,8 @@ while True:
 
             course = processArgToCourse(course.strip()) # returns [name,number]
 
-            if course not in selectedCourses:
-                selectedCourses.append(Course(course[0],course[1]))
+            if course not in selected_courses:
+                selected_courses.append(Course(course[0],course[1]))
 
     # Removes course(s)
     elif ('remove' in inp) or ('rem' in inp) or ('rmv' in inp):
@@ -209,68 +209,68 @@ while True:
 
             course = processArgToCourse(course.strip()) # evalCourse returns [name,number]
 
-            if course in selectedCourses:
-                selectedCourses.remove(course)
+            if course in selected_courses:
+                selected_courses.remove(course)
 
     # Displays term: courses
     elif inp in ['show','show courses']:
 
         print (term + ': ',end = '')
 
-        for course in selectedCourses:
+        for course in selected_courses:
             print (course.name,course.num+',',end='')
 
         print() #moves cursor to next line
-        print(i+': '+str(dayLengths[i]) for i in dayLengths)
+        print(i+': '+str(day_lengths[i]) for i in day_lengths)
 
     elif 'start' in inp and 'at' in inp:
         inp = inp.split(' ')
 
         if inp[1] == 'all':
             if inp[3] == 'reset':
-                for day in dayLengths:
-                    dayLengths[day][0] = 0
+                for day in day_lengths:
+                    day_lengths[day][0] = 0
             else:
-                for day in dayLengths:
-                    dayLengths[day][0] = int(inp[3])
+                for day in day_lengths:
+                    day_lengths[day][0] = int(inp[3])
         else:
             if inp[3] == 'reset':
                 for day in inp[1].upper():
-                    dayLengths[day][0] = 0
+                    day_lengths[day][0] = 0
             else:
                 for day in inp[1].upper():
-                    dayLengths[day][0] = int(inp[3])
+                    day_lengths[day][0] = int(inp[3])
 
     elif 'end' in inp and 'at' in inp:
         inp = inp.split(' ')
 
         if inp[1] == 'all':
             if inp[3] == 'reset':
-                for day in dayLengths:
-                    dayLengths[day][1] = 24
+                for day in day_lengths:
+                    day_lengths[day][1] = 24
             else:
-                for day in dayLengths:
-                    dayLengths[day][1] = int(inp[3])
+                for day in day_lengths:
+                    day_lengths[day][1] = int(inp[3])
         else:
             if inp[3] == 'reset':
                 for day in inp[1].upper():
-                    dayLengths[day][1] = 24
+                    day_lengths[day][1] = 24
             else:
                 for day in inp[1].upper():
-                    dayLengths[day][1] = int(inp[3])
+                    day_lengths[day][1] = int(inp[3])
 
     # Evaluates TimeTable
     elif ('calc' in inp) or ('eval table' in inp) or ('get tables' in inp):
 
         # Adds course info from web to Course Object
         try:
-            selectedCourses = [getCourse(course,getPage(term,course)) for course in selectedCourses]
+            selected_courses = [getCourse(course,getPage(term,course)) for course in selected_courses]
 
-            tables = evalTable(selectedCourses,dayLengths)
+            tables = eval_table(selected_courses,day_lengths)
 
         except NoSectionsAvailableOnline as e:
 
-            selectedCourses.remove(e.course)
+            selected_courses.remove(e.course)
 
             print(e.course.name,e.course.num,'is not available in',term)
             print('Removed the course.')
