@@ -1,5 +1,5 @@
 *.py[cod]
-__pycache__/
+**/__pycache__/
 *jpeg
 /.vscode/
 /env/
