@@ -263,6 +263,7 @@ while True:
     elif ('calc' in inp) or ('eval table' in inp) or ('get tables' in inp):
 
         # Adds course info from web to Course Object
+        for i in selected_courses: print(i)
         try:
             selected_courses = [getCourse(course,getPage(term,course)) for course in selected_courses]
 

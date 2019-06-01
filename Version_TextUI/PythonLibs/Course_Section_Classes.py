@@ -44,7 +44,7 @@ class Table:
                                 for day in 'MTWRF'])
         '''
 
-        return '\n'.join(day +': '+str(table)[1:-1] for day,table in zip('MTWRF',self))
+        return '\n'.join(day +': '+str([i[:3] for i in table ])[1:-1] for day,table in zip('MTWRF',self))
 
     def addPddingCourses(self):
         #adds Course('start) and Course('end') to each day
@@ -61,15 +61,15 @@ Can be compared to [course,num] or Course objects
 '''
 class Course:
 
-    def __init__(self,course,num,lectures=[],labs=[],tutorials=[]):
+    def __init__(self,course,num):
 
         self.name = course
         self.num = num
 
         #Contain Section objects
-        self.lectures = lectures
-        self.labs = labs
-        self.tutorials = tutorials
+        self.lectures = list()
+        self.labs = list()
+        self.tutorials = list()
 
     def __eq__(self,course):
 
