@@ -102,8 +102,6 @@ def insert_same_in_table(section,table):
 def eval_table(selected_courses,day_lengths):
 
     print(selected_courses)
-    for i in selected_courses:
-        print(i)
 
     tables = [Table()] #free weekby default
 
@@ -111,10 +109,8 @@ def eval_table(selected_courses,day_lengths):
     new_tables={}
 
     for course in selected_courses:
-        print(course.name)
         for type_ in course:
             for section in type_:
-                print(section)
 
                 # skip if class falls out of required schedule
                 if not check_section_with_day_lengths(section,day_lengths): continue

@@ -221,7 +221,7 @@ while True:
             print (course.name,course.num+',',end='')
 
         print() #moves cursor to next line
-        print(i+': '+str(day_lengths[i]) for i in day_lengths)
+        print([i+': '+str(day_lengths[i]) for i in day_lengths])
 
     elif 'start' in inp and 'at' in inp:
         inp = inp.split(' ')
@@ -263,7 +263,6 @@ while True:
     elif ('calc' in inp) or ('eval table' in inp) or ('get tables' in inp):
 
         # Adds course info from web to Course Object
-        for i in selected_courses: print(i)
         try:
             selected_courses = [getCourse(course,getPage(term,course)) for course in selected_courses]
 
