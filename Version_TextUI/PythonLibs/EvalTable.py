@@ -48,7 +48,7 @@ def insert_in_table(section,table):
 
     #Waring this makes the lists in all days point to sam list
     #if you make change in one to_insert in one day, all of them change
-    to_insert = [time[0],time[1],section.cName+section.cNum,section.section]
+    to_insert = [time[0],time[1],section.course_name+section.course_num,section.section]
 
     for day in section.days:
         #inserting in free day
@@ -102,6 +102,8 @@ def insert_same_in_table(section,table):
 def eval_table(selected_courses,day_lengths):
 
     print(selected_courses)
+    for i in selected_courses:
+        print(i)
 
     tables = [Table()] #free weekby default
 
@@ -109,8 +111,10 @@ def eval_table(selected_courses,day_lengths):
     new_tables={}
 
     for course in selected_courses:
+        print(course.name)
         for type_ in course:
             for section in type_:
+                print(section)
 
                 # skip if class falls out of required schedule
                 if not check_section_with_day_lengths(section,day_lengths): continue
@@ -240,8 +244,8 @@ def Test_evalTable():
         for type_ in coursesInfo[course.name+course.num]:
             for section in coursesInfo[course.name+course.num][type_]:
                 s = Section()
-                s.cName = course.name
-                s.cNum = course.num
+                s.course_name = course.name
+                s.course_num = course.num
                 s.section = section['section']
                 s.days = section['days']
                 s.place = section['place']

@@ -1,12 +1,56 @@
 <!-- html for table-->
+<table>
 
-<label for='instructors'>Choose Instructor(s):&nbsp</label>
-<input type='checkbox' name="instructors" id="instructors">Inst1&nbsp</input>
-<input type='checkbox' name="instructors" id="instructors">Inst2&nbsp</input>
-<input type='checkbox' name="instructors" id="instructors">Inst3&nbsp</input>
+    <tr>
+        <th>Lectures</th>
+    </tr>
+    {% for section in lectures %}
+    <tr>
+        <td><input type='checkbox' id="{{course}}{{section.name}}" checked></input></td>
+        <td>{{section.name}}&nbsp;</td>
+        <td>{{section.time}}&nbsp;</td>
+        <td>{{section.days}}&nbsp;</td>
+        <td>{{section.instructor}}&nbsp;</td>
+    </tr>
+    {% endfor %}
 
-<br><br>
+    <tr>
+        <th style="text-align:left;">Labs</th>
+    </tr>
+    {% for section in labs %}
+    <tr>
+        <td><input type='checkbox' id="{{course}}{{section.name}}" checked></input></td>
+        <td>{{section.name}}&nbsp;</td>
+        <td>{{section.time}}&nbsp;</td>
+        <td>{{section.days}}&nbsp;</td>
+        <td>{{section.instructor}}&nbsp;</td>
+    </tr>
+    {% endfor %}
+
+    <tr>
+        <th>Tutorials</th>
+    </tr>
+    {% for section in tutorials %}
+    <tr>
+        <td><input type='checkbox' id="{{course}}{{section.name}}" checked></input></td>
+        <td>{{section.name}}&nbsp;</td>
+        <td>{{section.time}}&nbsp;</td>
+        <td>{{section.days}}&nbsp;</td>
+        <td>{{section.instructor}}&nbsp;</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
 
 <label for='modeSectionSelection'>Mode:&nbsp</label>
 <input type='radio' name="modeSectionSelection" id="modeSectionSelection">Only use selected&nbsp</input>
 <input type='radio' name="modeSectionSelection" id="modeSectionSelection">Don't use selected&nbsp</input>
+
+<br><br>
+
+<button id="make-tables">Make Tables</button>
+
+<script text="text/javascript">
+    $('#make-tables').on('click', alert);
+</script>

@@ -1,343 +1,260 @@
 $(function() {
-    /*
+  /*
         TODO:
-            -selecting course, validate num field
-            - add crosses to tabs
-    */
-    /*
-        AJAX GET
-        $.ajax({
-            type:'GET',
-            url: '/api/order'
-            success: function (data){
-                console.log(data)
-            }
-            error: function()
-        });
-
-        // can use data inside function success, response is given as argument
-
-        return sample:
-        {
-            'a':1,
-            'b':2
-        }
-
-        or
-
-        [
-            a,
-            b
-        ]
-        ---------------------
-
-        $.each(<list>,<function>(i,<item>))
-
-        $orders = $('#order');
-        $orders.append('<li> my order </li>')
-
-        ------------------------
-
-        AJAX POST
-
-        $.ajax({
-            type:'POST',
-            url: '/api/order',
-            data: <object/dict>
-            success: function (data){
-                console.log(data)
-            }
-            error: function()
-        });
-
-
-        ------------------------
-
-        AJAX DELETE
-
-        $.ajax({
-            type:'DELETE',
-            url: '/api/order',
-            data: <object/dict>
-            success: function (data){
-                console.log(data)
-            }
-            error: function()
-        });
-
-        **** if some elemnts are not there at loading of page/called later then eventListener
-        might not attach to it. You can attach a listener to parent tag though
-
-        eg let $orders = parent tag
-
-        $orders.delegate('.remove','click', <function>);
-
-        *** $(this) in success fuction refers to ajax request, so store $(this) outside
-        if needed and use it inside with the variable
-
-        -----------------
-
-        $.ajax({
-                type:'GET',
-                url:'/api/cInfo/',
-                success: addTab($cInfo,data.cName,data.html),
-                error:postError('conection error'),
-                data: {
-                    'selectedCourses':selectedCourses,
-
-                    'dayConstr':[
-                        [parseInt($Mstart.val()),parseInt($Mend.val())],
-                        [parseInt($Tstart.val()),parseInt($Tend.val())],
-                        [parseInt($Wstart.val()),parseInt($Wend.val())],
-                        [parseInt($Rstart.val()),parseInt($Rend.val())],
-                        [parseInt($Fstart.val()),parseInt($Fend.val())]
-                    ]
-                }
-
-            })
-
     */
 
-    selectedCourses = [];
+  //   Globals
 
-    // Cashing input fields
-    $term = $('#term');
-    $cName = $('#cName');
-    $cNum = $('#cNum');
+  selectedCourses = [];
+  courseSections = {}; // stores courses as keys and theirs sections' ids in array.
+  //{'CSC111':['A01','B01']}
 
-    $Mstart = $('#Mstart')
-    $Tstart = $('#Tstart')
-    $Wstart = $('#Wstart')
-    $Rstart = $('#Rstart')
-    $Fstart = $('#Fstart')
+  // Cashing input fields
+  $term = $("#term");
+  $cName = $("#cName");
+  $cNum = $("#cNum");
 
-    $Mend = $('#Mend')
-    $Tend = $('#Tend')
-    $Wend = $('#Wend')
-    $Rend = $('#Rend')
-    $Fend = $('#Fend')
+  $Mstart = $("#Mstart");
+  $Tstart = $("#Tstart");
+  $Wstart = $("#Wstart");
+  $Rstart = $("#Rstart");
+  $Fstart = $("#Fstart");
 
-    //Cashing course-info window and tables window
-    $cInfo = $('#cInfo');
-    $tables = $('#tables');
-    $messages = $('#messages')
+  $Mend = $("#Mend");
+  $Tend = $("#Tend");
+  $Wend = $("#Wend");
+  $Rend = $("#Rend");
+  $Fend = $("#Fend");
 
-    // Initialize some events
+  //Cashing course-info window and tables window
+  $cInfo = $("#cInfo");
+  $tables = $("#tables");
+  $messages = $("#messages");
 
-    //close button
-    $('.tab-panels .tabs li .close').on('click',closeTab);
+  // Events listeners
 
-    // For Tabs switching
-    $('.tab-panels .tabs li').on('click', ToggleTab);
+  //Reset button
+  $("#reset").on("click", function() {
+    $term.val("201901");
+    $cName.val("AGEI");
+    $cNum.val("");
 
-    //Reset button
-    $('#reset').on('click', function() {
-        $term.val('201901');
-        $cName.val('AGEI');
-        $cNum.val('');
+    $Mstart.val(0).trigger("input");
+    $Tstart.val(0).trigger("input");
+    $Wstart.val(0).trigger("input");
+    $Rstart.val(0).trigger("input");
+    $Fstart.val(0).trigger("input");
 
-        $Mstart.val(0).trigger('input');
-        $Tstart.val(0).trigger('input');
-        $Wstart.val(0).trigger('input');
-        $Rstart.val(0).trigger('input');
-        $Fstart.val(0).trigger('input');
+    $Mend.val(24).trigger("input");
+    $Tend.val(24).trigger("input");
+    $Wend.val(24).trigger("input");
+    $Rend.val(24).trigger("input");
+    $Fend.val(24).trigger("input");
 
-        $Mend.val(24).trigger('input');
-        $Tend.val(24).trigger('input');
-        $Wend.val(24).trigger('input');
-        $Rend.val(24).trigger('input');
-        $Fend.val(24).trigger('input');
+    removeErrors();
+  });
 
-        removeErrors();
-    });
+  // Range sliders, start vs end are consistent
+  $(".dayTime-slider.start").on("input", function() {
+    //get relative end slider
+    var $end = $(
+      "#" +
+        $(this)
+          .attr("id")
+          .substr(0, 1) +
+        "end"
+    );
 
+    // if less put it equal
+    if (parseInt($(this).val()) > parseInt($end.val())) {
+      $end.val($(this).val()).trigger("input");
+    }
+  });
 
-    // Range sliders, start vs end are consistent
-    $('.dayTime-slider.start').on('input', function() {
+  $(".dayTime-slider.end").on("input", function() {
+    //get relative start slider
+    var $start = $(
+      "#" +
+        $(this)
+          .attr("id")
+          .substr(0, 1) +
+        "start"
+    );
 
-        //get relative end slider
-        $end = $('#' + $(this).attr('id').substr(0,1) + 'end');
+    // if more put it equal
+    if (parseInt($(this).val()) < parseInt($start.val())) {
+      $start.val($(this).val()).trigger("input");
+    }
+  });
 
-        // if less put it equal
-        if (parseInt($(this).val()) > parseInt($end.val())){
-            $end.val($(this).val()).trigger('input');
+  // Select course and put in tabs
+  $("#select-course").on("click", function() {
+    removeErrors();
+
+    // check if course is already there
+    var alreadyIn = selectedCourses.reduce((prev, curr) => {
+      return prev || ($cName.val() === curr[0] && $cNum.val() === curr[1]);
+    }, false);
+
+    // Validate and send
+    if (!$cNum.val()) {
+      postError("numNotGiven");
+    } else if (100 > parseInt($cNum.val()) || parseInt($cNum.val()) >= 800) {
+      postError("invalidNum");
+    } else if (alreadyIn) {
+      postError("alreadyIn");
+    } else {
+      $.ajax({
+        type: "GET",
+        url: "/api/cInfo/",
+        data: {
+          term: parseInt($term.val()),
+          cName: $cName.val(),
+          cNum: parseInt($cNum.val())
+        },
+        success: data => {
+          selectedCourses.push([$cName.val(), $cNum.val()]);
+          courseSections[data.course.replace(" ", "")] = data.sections;
+          addTab($cInfo, data.course, data.html);
+        },
+        error: data => {
+          postError("connection-error");
         }
-    });
+      });
+    }
+  });
 
-    $('.dayTime-slider.end').on('input', function() {
+  // Helper functions
 
-        //get relative start slider
-        $start = $('#' + $(this).attr('id').substr(0,1) + 'start');
+  // adds tab
+  function addTab($tabPanels, header, content) {
+    // create
+    var $tab = $("<li></li>")
+      .text(header)
+      .attr({
+        rel: header.replace(" ", "-")
+      })
+      .on("click", ToggleTab);
 
-        // if more put it equal
-        if (parseInt($(this).val()) < parseInt($start.val())){
+    // add close button
+    $tab.append(
+      $("<span>")
+        .addClass("close")
+        .on("click", closeTab)
+    );
 
-            $start.val($(this).val()).trigger('input');
-        }
-    });
+    // add tab
+    $tabPanels.find(".tabs").append($tab);
 
-    // Select course and put in tabs
-    $('#select-course').on('click', function() {
+    var $panel = $("<div></div>")
+      .addClass("panel")
+      .attr({
+        id: header.replace(" ", "-")
+      })
+      .html(content);
 
-        removeErrors();
+    //create and add panel
+    $tabPanels.append($panel);
 
-        // check if course is already there
-        var alreadyIn = selectedCourses.reduce((prev,curr)=>{
+    //select this tab
+    $tab.click();
+  }
 
-            return prev || ($cName.val() === curr[0] && $cNum.val() === curr[1]);
+  // changes tabs when clicked
+  function ToggleTab() {
+    var $panel = $(this).closest(".tab-panels");
 
-        }, false);
+    $panel.find(".tabs li.active").removeClass("active");
+    $(this).addClass("active");
 
-        // Validate and send
-        if (!$cNum.val()){
+    //figure out which panel to show
+    var panelToShow = $(this).attr("rel");
 
-            postError('numNotGiven');
+    //hide current panel if exists (might not at start)
+    var $activePanel = $panel.find(".panel.active");
 
-        } else if(100 > parseInt($cNum.val()) || parseInt($cNum.val()) >= 800){
-
-            postError('invalidNum');
-
-
-        } else if (alreadyIn){
-            postError('alreadyIn');
-
-        } else {
-
-            $.ajax({
-                type:'GET',
-                url:'/api/cInfo/',
-                data: {
-                    'term':parseInt($term.val()),
-                    'cName':$cName.val(),
-                    'cNum':parseInt($cNum.val())
-                },
-                success: (data) => {
-
-                    selectedCourses.push([$cName.val(), $cNum.val()]);
-                    addTab($cInfo,data.name,data.html);
-                },
-                error: (data) =>{
-                    postError('connection-error')
-                }
-            })
-        }
-
-    });
-
-    // adds tab
-    function addTab($tabPanels,header,content) {
-
-        // create
-        var $tab = $("<li></li>").text(header).attr({rel:header.replace(' ','-')}).on('click',ToggleTab);
-
-        // add close button
-        $tab.append($('<span>').addClass('close').on('click',function() {
-            $tab = $(this).closest('li');
-
-            closeTab();
-        }));
-
-        // add tab
-        $tabPanels.find('.tabs').append($tab);
-
-        var $panel = $('<div></div>').addClass('panel').attr({id:header.replace(' ','-')}).html(content);
-
-        //create and add panel
-        $tabPanels.append($panel);
-
-        $tab.click();
+    if ($activePanel[0]) {
+      $activePanel.hide(0, showNextPanel);
+    } else {
+      showNextPanel();
     }
 
-    // changes tabs when clicked
-    function ToggleTab() {
+    //show next panel
+    function showNextPanel() {
+      $(this).removeClass("active");
 
-        var $panel = $(this).closest('.tab-panels');
+      $("#" + panelToShow).show(0, function() {
+        $(this).addClass("active");
+      });
+    }
+  }
 
+  // closes tabs when clicked close
+  function closeTab() {
+    var $tab = $(this).closest("li");
 
-        $panel.find('.tabs li.active').removeClass('active');
-        $(this).addClass('active');
-
-        //figure out which panel to show
-        var panelToShow = $(this).attr('rel');
-
-        //hide current panel if exists (might not at start)
-        var $activePanel = $panel.find('.panel.active')
-
-        if ($activePanel[0]){
-
-            $activePanel.hide(0, showNextPanel);
-
-        } else {
-            showNextPanel();
-        }
-
-        //show next panel
-        function showNextPanel() {
-            $(this).removeClass('active');
-
-            $('#'+panelToShow).show(0, function() {
-                $(this).addClass('active');
-            });
-        }
-    };
-
-    // closes tabs when clicked close
-    function closeTab() {
-        $tab = $(this).closest('li');
-
-        // show another tab if tab was active
-        if ($tab.hasClass('active')){
-
-            if ($tab.next()[0]){
-
-                $tab.next().trigger('click');
-
-            } else {
-                $tab.prev().trigger('click');
-            }
-        }
-
-        $('#'+$tab.attr('rel')).remove();
-        $tab.remove();
-    };
-
-    // close course Tab
-
-
-    //post error message
-    function postError(error){
-        // create message, marked with error (class alreadyIn)
-        $message = $('<li>').css({color:'red'}).addClass(error);
-
-        switch(error){
-            case 'alreadyIn':
-                $message.text('Course already selected');
-                break;
-
-            case 'invalidNum':
-                $message.text('No. is invalid');
-                break;
-
-            case 'numNotGiven':
-                $message.text('No. not given');
-                break;
-
-            case 'connection-error':
-                $message.text('Error Ocurred in connecting to back-end');
-
-        }
-
-        //Post it to user
-        $messages.append($message);
+    // remove from seleced courses (if from $cinfo)
+    if (
+      $tab
+        .parent()
+        .parent()
+        .is($cInfo)
+    ) {
+      var course = $tab.attr("rel").split("-");
+      var index = selectedCourses.findIndex(e => {
+        return e[0] === course[0] && e[1] === course[1];
+      });
+      if (index !== -1) selectedCourses.splice(index, 1);
     }
 
-    //removes error messages to user
-    function removeErrors(){
-        $('.alreadyIn').remove();
-        $('.invalidNum').remove();
-        $('.numNotGiven').remove();
-        $('.connection-error').remove();
+    // show another tab if tab was active
+    if ($tab.hasClass("active")) {
+      if ($tab.next()[0]) {
+        $tab.next().trigger("click");
+      } else {
+        $tab.prev().trigger("click");
+      }
     }
 
+    $("#" + $tab.attr("rel")).remove();
+    $tab.remove();
+  }
 
+  //post error message
+  function postError(error) {
+    // create message, marked with error (class alreadyIn)
+    var $message = $("<li>")
+      .css({
+        color: "red"
+      })
+      .addClass(error);
+
+    switch (error) {
+      case "alreadyIn":
+        $message.text("Course already selected");
+        break;
+
+      case "invalidNum":
+        $message.text("No. is invalid");
+        break;
+
+      case "numNotGiven":
+        $message.text("No. not given");
+        break;
+
+      case "connection-error":
+        $message.text("Error Ocurred in connecting to back-end");
+    }
+
+    //Post it to user
+    $messages.append($message);
+  }
+
+  //removes error messages to user
+  function removeErrors() {
+    $(".alreadyIn").remove();
+    $(".invalidNum").remove();
+    $(".numNotGiven").remove();
+    $(".connection-error").remove();
+  }
 });

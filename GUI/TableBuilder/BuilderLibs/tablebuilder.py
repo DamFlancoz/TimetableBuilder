@@ -89,7 +89,7 @@ def insert_in_table(section, table):
 
     # Waring this makes the lists in all days point to sam list
     # if you make change in one to_insert in one day, all of them change
-    to_insert = [time[0], time[1], section.cName + section.cNum, section.section]
+    to_insert = [time[0], time[1], section.course_name + section.course_num, section.section]
 
     for day in section.days:
         # inserting in free day

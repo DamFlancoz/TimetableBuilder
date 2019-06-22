@@ -110,8 +110,8 @@ class Course:
 class Section:
     def __init__(self):
 
-        self.cName = ""
-        self.cNum = ""
+        self.course_name = ""
+        self.course_num = ""
         self.section = ""
         self.crn = ""
         self.time = ()
@@ -128,15 +128,15 @@ class Section:
             return (
                 other[0] == self.time[0]
                 and other[1] == self.time[1]
-                and other[2] == self.cName + self.cNum
+                and other[2] == self.course_name + self.course_num
             )
 
         elif type(other) == Section:
             return (
                 other.time == self.time
                 and other.days == self.days
-                and other.cName == self.cName
-                and other.cNum == self.cNum
+                and other.course_name == self.course_name
+                and other.course_num == self.course_num
             )
 
         else:
@@ -148,9 +148,9 @@ class Section:
     def __str__(self):
         return (
             "Course: "
-            + self.cName
+            + self.course_name
             + " "
-            + self.cNum
+            + self.course_num
             + " | Section: "
             + self.section
             + " | Time: "
@@ -162,9 +162,9 @@ class Section:
     def __rep__(self):
         return (
             "Course: "
-            + self.cName
+            + self.course_name
             + " "
-            + self.cNum
+            + self.course_num
             + " | Section: "
             + self.section
             + " | Time: "

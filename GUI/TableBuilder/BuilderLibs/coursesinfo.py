@@ -25,8 +25,8 @@ def get_course_info(term, course):
     Raises:
         NoSectionsAvailableOnline: if get_page cannot find such section.
     '''
-
-    page = get_page(term, Course(course[0],course[1])
+    course = Course(course[0],course[1])
+    page = get_page(term, course)
     return parse_course_html(course, page)
 
 
@@ -84,7 +84,7 @@ def parse_course_html(course, course_page_html):
         Course Object: Contains all labs, tutorials and lecture info available.
     '''
 
-    page_poup = bSoup(course_page_html, "lxml")  # parsed html, soup
+    page_soup = bSoup(course_page_html, "lxml")  # parsed html, soup
 
 
     # Gives back table of all classes and other tables in list. [0] takes needed
@@ -108,8 +108,8 @@ def parse_course_html(course, course_page_html):
             section.crn = title_list[1]
 
             course_name = title_list[2].split(" ")  # eg ['CSC','111']
-            section.cName = course_name[0]
-            section.cNum = course_name[1]
+            section.course_name = course_name[0]
+            section.course_num = course_name[1]
 
             info = section_list[i + 3].findAll("td")
             section.setTime(str(info[1].text))  # turns str time to tuple

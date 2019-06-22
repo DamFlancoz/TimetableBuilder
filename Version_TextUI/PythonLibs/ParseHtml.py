@@ -42,8 +42,8 @@ def getCourse(course,course_page_html):
             section.crn = titleList[1]
 
             courseName = titleList[2].split(' ') #eg ['CSC','111']
-            section.cName = courseName[0]
-            section.cNum = courseName[1]
+            section.course_name = courseName[0]
+            section.course_num = courseName[1]
 
             info = sectionList[i+3].findAll('td')
             section.setTime(str(info[1].text)) # turns str time to tuple

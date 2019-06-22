@@ -120,8 +120,8 @@ class Section:
 
     def __init__(self):
 
-        self.cName = ''
-        self.cNum = ''
+        self.course_name = ''
+        self.course_num = ''
         self.section = ''
         self.crn = ''
         self.time = ()
@@ -136,13 +136,13 @@ class Section:
         # eg: T01 and T02 can be equal.
         if ((type(other) == tuple or type(other) == list) and len(other) == 4):
             return (other[0] == self.time[0] and other[1] == self.time[1]
-                    and other[2] == self.cName+self.cNum)
+                    and other[2] == self.course_name+self.course_num)
 
         elif (type(other) == Section):
             return (other.time == self.time
                     and other.days == self.days
-                    and other.cName == self.cName
-                    and other.cNum == self.cNum)
+                    and other.course_name == self.course_name
+                    and other.course_num == self.course_num)
 
         else:
             return NotImplemented
@@ -151,14 +151,14 @@ class Section:
         return (not self == other)
 
     def __str__(self):
-        return ('Course: ' + self.cName + ' ' + self.cNum
+        return ('Course: ' + self.course_name + ' ' + self.course_num
                 + ' | Section: ' + self.section
                 + ' | Time: ' + str(self.time)
                 + ' | Days: ' + self.days
                 )
 
     def __rep__(self):
-        return('Course: ' + self.cName + ' ' + self.cNum
+        return('Course: ' + self.course_name + ' ' + self.course_num
                 + ' | Section: ' + self.section
                 + ' | Time: ' + str(self.time)
                 + ' | Days: ' + self.days
