@@ -2,5 +2,6 @@
 **/__pycache__/
 *jpeg
 /.vscode/
-/env/
-/Protos/ ## folder for prototypes
+/.venv/
+/Protos/
+# folder for prototypes
