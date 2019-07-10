@@ -12,14 +12,11 @@ TODO:
 import re
 from time import localtime
 
-from src.timetablebuilder.builderlibs.webscrapper import get_course_html
-from src.timetablebuilder.builderlibs.parsehtml import put_sections_in_course
-from src.timetablebuilder.builderlibs.calctable import calculate_tables
-from src.timetablebuilder.builderlibs.builderclasses import Table, Course
-from src.timetablebuilder.builderlibs.exceptions import (
-    NoSectionsAvailableOnline,
-    NoSectionOfTypeFit,
-)
+from src.builderlibs.webscrapper import get_course_html
+from src.builderlibs.parsehtml import put_sections_in_course
+from src.builderlibs.calctable import calculate_tables
+from src.builderlibs.builderclasses import Table, Course
+from src.builderlibs.exceptions import NoSectionsAvailableOnline, NoSectionOfTypeFit
 
 
 def set_term(inp):

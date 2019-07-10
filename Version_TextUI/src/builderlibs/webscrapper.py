@@ -3,8 +3,8 @@
 
 from urllib.request import urlopen
 
-from src.timetablebuilder.builderlibs.exceptions import NoSectionsAvailableOnline
-from src.timetablebuilder.builderlibs.builderclasses import Course
+from src.builderlibs.exceptions import NoSectionsAvailableOnline
+from src.builderlibs.builderclasses import Course
 
 
 def get_course_html(term, course):

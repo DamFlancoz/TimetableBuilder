@@ -1,31 +1,62 @@
-"""Contains  tests for all VersionText"""
+"""
+Contains tests for all VersionText TimeTable Builder.
+
+Note:
+    * Currently there is no way to test accurately if parser can parse the updated
+        webpage if UVic decides to update their format.
+
+TODO:
+    * Add a test to check if a page of valid course fetch
+"""
 
 import os
+import re
 
-from src.timetablebuilder.builderlibs.webscrapper import get_course_html
-from src.timetablebuilder.builderlibs.parsehtml import put_sections_in_course
-from src.timetablebuilder.builderlibs.calctable import calculate_tables
-from src.timetablebuilder.builderlibs.builderclasses import Table, Course, Section
-from src.timetablebuilder.builderlibs.exceptions import (
-    NoSectionsAvailableOnline,
-    NoSectionOfTypeFit,
-)
+from src.builderlibs.webscrapper import get_course_html
+from src.builderlibs.parsehtml import put_sections_in_course
+from src.builderlibs.calctable import calculate_tables
+from src.builderlibs.builderclasses import Table, Course, Section
+from src.builderlibs.exceptions import NoSectionsAvailableOnline, NoSectionOfTypeFit
 
+# html page for parser
 with open(os.path.join("tests", "csc111spring2019.html"), "r") as t:
     csc111_html = t.read()
 
-########################### test web scrapping
+
+def ishtml(p):
+    """
+    Checks if given string is a html page.
+    """
+    return bool(
+        re.search(
+            r"""
+            <html .*?>.*?
+            <head>.*?
+            </head>.*?
+            <body>.*?
+            </body>.*?
+            </html>
+            """,
+            p,
+            flags=re.DOTALL | re.IGNORECASE | re.VERBOSE,
+        )
+    )
+
+
+def deep_tuple(t):
+    """
+    Converts all nested lists to tuples to tuple. Helpful when need to convert
+    to set from nested lists. Used in testing tables calculator.
+    """
+    return tuple(deep_tuple(i) for i in t) if type(t) == list or type(t) == Table else t
 
 
 def test_get_course_html():
+    """Tests web scrapper"""
 
-    expected = csc111_html
     getting = get_course_html("201901", Course("CSC", "111"))
 
-    # with open(os.path.join("tests", "csc111spring2019.html"), "w") as t:
-    #     t.write(getting)
-
-    assert expected == getting
+    assert ishtml(getting)
 
     # Page not available cases check
     # CSC 111 and math 101 in 201902 give a little different pages
@@ -45,12 +76,9 @@ def test_get_course_html():
         pass
 
 
-########################## testing html parsing
-
-
 def test_put_in_sections_course():
     """
-    Case of CSC111, 2019 jan-term
+    tests the parser on a stored valid page.
     """
 
     course_page_html = csc111_html
@@ -73,18 +101,10 @@ Tutorials:
     assert str(getting) == expected
 
 
-####################### test calculate tables
-
-
-def deep_tuple(t):
-    """
-    Converts all nested lists to tuples to tuple. Helpful when need to convert
-    to set from nested lists. Used in Test_evalTable
-    """
-    return tuple(deep_tuple(i) for i in t) if type(t) == list or type(t) == Table else t
-
-
 def test_calculate_tables():
+    """
+    tests table calculator with stored courses
+    """
 
     courses_info = {
         "MATH200": {
@@ -249,10 +269,4 @@ def test_calculate_tables():
 
     tables = calculate_tables(selected_courses, day_lengths)
 
-    # show all 6 tables
-    # for table in tables:
-    #     print(table)
-    #     print()
-
-    # this line takes considerable time
     assert expected == set(deep_tuple(tables)), "calculate_tables failed"

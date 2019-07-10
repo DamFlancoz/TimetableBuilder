@@ -2,8 +2,11 @@
 
 from copy import deepcopy
 
-from src.timetablebuilder.builderlibs.exceptions import NotFit, NoSectionOfTypeFit
-from src.timetablebuilder.builderlibs.builderclasses import Table, Course, Section
+from src.builderlibs.exceptions import NotFit, NoSectionOfTypeFit
+from src.builderlibs.builderclasses import Table, Course, Section
+
+# from exceptions import NotFit, NoSectionOfTypeFit
+# from builderclasses import Table, Course, Section
 
 
 def check_section_with_day_lengths(section, day_lengths):
@@ -15,16 +18,16 @@ def check_section_with_day_lengths(section, day_lengths):
         day_lengths (dict): dictionary with M,T,W,R,F keys with day lengths in tuple.
 
     Returns:
-        bool: True if section fits in day_length False.
+        bool: True if section fits in day_length, otherwise False.
     """
 
-    return all(
-        [
-            section.time[0] <= day_lengths[day][0]
-            or section.time[1] >= day_lengths[day][1]
-            for day in section.days
-        ]
-    )
+    a = [
+        section.time[0] >= day_lengths[day][0]
+        and section.time[1] <= day_lengths[day][1]
+        for day in section.days
+    ]
+
+    return all(a)
 
 
 def insert_in_table(section, table):
@@ -113,6 +116,14 @@ def insert_same_in_table(section, table):
     return table
 
 
+def deep_tuple(t):
+    """
+    Converts all nested lists to tuples to tuple. Helpful when need to convert
+    to set from nested lists. Used in Test_evalTable
+    """
+    return tuple(deep_tuple(i) for i in t) if type(t) == list or type(t) == Table else t
+
+
 def calculate_tables(selected_courses, day_lengths):
     """
     Evaluates all possible tables from selected_courses and day_lengths and return the
@@ -126,15 +137,13 @@ def calculate_tables(selected_courses, day_lengths):
         Table Object: Table with section inserted.
     """
 
-    # prints all selected courses
-    for i in selected_courses:
-        print(i)
+    print("No. of selected course:", len(selected_courses))
 
     tables = [Table()]  # free weekly default
     new_tables = {}  # acts as buffer for new tables made in each type for each section
 
     for course in selected_courses:
-        print(course.name)
+        print(course.name + course.num)
         for type_ in course:
             for section in type_:
                 print(section)
@@ -181,3 +190,181 @@ def calculate_tables(selected_courses, day_lengths):
             new_tables = {}
 
     return tables
+
+
+def test_calculate_tables():
+
+    courses_info = {
+        "MATH200": {
+            "labs": [],
+            "lectures": [
+                {
+                    "type": "Lecture",
+                    "section": "A01",
+                    "days": "MR",
+                    "place": "Hickman Building 105",
+                    "time": "8:30 am - 11:50 pm",
+                    "instructor": "Andrew Mc (P)",
+                    "crn": "22034",
+                }
+            ],
+            "tutorials": [
+                {
+                    "type": "Tutorial",
+                    "section": "T01",
+                    "days": "T",
+                    "place": "Building A212",
+                    "time": "3:30 pm - 4:20 pm",
+                    "instructor": "TBA",
+                    "crn": "22035",
+                },
+                {
+                    "type": "Tutorial",
+                    "section": "T02",
+                    "days": "T",
+                    "place": "Cornett Building A121",
+                    "time": "3:30 pm - 4:20 pm",
+                    "instructor": "TBA",
+                    "crn": "22036",
+                },
+            ],
+        },
+        "MATH204": {
+            "labs": [],
+            "lectures": [
+                {
+                    "type": "Lecture",
+                    "section": "A01",
+                    "days": "TWF",
+                    "place": "David Strong Building C103",
+                    "time": "1:30 pm - 2:20 pm",
+                    "instructor": "Muhammad (P)",
+                    "crn": "22040",
+                },
+                {
+                    "type": "Lecture",
+                    "section": "A02",
+                    "days": "TWF",
+                    "place": "David Turpin Building A104",
+                    "time": "8:30 am - 9:20 am",
+                    "instructor": "Slim Sir (P)",
+                    "crn": "22041",
+                },
+            ],
+            "tutorials": [
+                {
+                    "type": "Tutorial",
+                    "section": "T01",
+                    "days": "F",
+                    "place": "David Turpin Building A110",
+                    "time": "3:30 pm - 4:20 pm",
+                    "instructor": "TBA",
+                    "crn": "22042",
+                },
+                {
+                    "type": "Tutorial",
+                    "section": "T02",
+                    "days": "R",
+                    "place": "David Turpin Building A102",
+                    "time": "4:30 pm - 5:20 pm",
+                    "instructor": "TBA",
+                    "crn": "22043",
+                },
+                {
+                    "type": "Tutorial",
+                    "section": "T03",
+                    "days": "F",
+                    "place": "David Turpin Building A102",
+                    "time": "2:30 pm - 3:20 pm",
+                    "instructor": "TBA",
+                    "crn": "22044",
+                },
+                {
+                    "type": "Tutorial",
+                    "section": "T04",
+                    "days": "F",
+                    "place": "David Turpin Building A102",
+                    "time": "3:30 pm - 4:20 pm",
+                    "instructor": "TBA",
+                    "crn": "22045",
+                },
+            ],
+        },
+    }
+
+    selected_courses = [Course("MATH", "200"), Course("MATH", "204")]
+
+    # 6 tables by default
+    # R 17 rejects 2
+    # T 16.5 is on border but doesn't reject any
+    day_lengths = {
+        "M": (0, 24),
+        "T": (0, 16.5),
+        "W": (0, 24),
+        "R": (0, 17),
+        "F": (0, 24),
+    }
+
+    # puts info in Course objects
+    for course in selected_courses:
+        for type_ in courses_info[course.name + course.num]:
+            for section in courses_info[course.name + course.num][type_]:
+
+                # get section
+                s = Section()
+                s.course_name = course.name
+                s.course_num = course.num
+                s.section = section["section"]
+                s.days = section["days"]
+                s.place = section["place"]
+                s.setTime(section["time"])
+                s.instructor = section["instructor"]
+                s.crn = section["crn"]
+
+                # put in course
+                exec("course." + type_ + ".append(s)")
+
+    expected = {
+        (
+            ((8.5, 12, "MATH200", "A01"),),
+            ((13.5, 14.5, "MATH204", "A01"), (15.5, 16.5, "MATH200", "T01", "T02")),
+            ((13.5, 14.5, "MATH204", "A01"),),
+            ((8.5, 12, "MATH200", "A01"),),
+            ((13.5, 14.5, "MATH204", "A01"), (14.5, 15.5, "MATH204", "T03")),
+        ),
+        (
+            ((8.5, 12, "MATH200", "A01"),),
+            ((13.5, 14.5, "MATH204", "A01"), (15.5, 16.5, "MATH200", "T01", "T02")),
+            ((13.5, 14.5, "MATH204", "A01"),),
+            ((8.5, 12, "MATH200", "A01"),),
+            ((13.5, 14.5, "MATH204", "A01"), (15.5, 16.5, "MATH204", "T01", "T04")),
+        ),
+        (
+            ((8.5, 12, "MATH200", "A01"),),
+            ((8.5, 9.5, "MATH204", "A02"), (15.5, 16.5, "MATH200", "T01", "T02")),
+            ((8.5, 9.5, "MATH204", "A02"),),
+            ((8.5, 12, "MATH200", "A01"),),
+            ((8.5, 9.5, "MATH204", "A02"), (15.5, 16.5, "MATH204", "T01", "T04")),
+        ),
+        (
+            ((8.5, 12, "MATH200", "A01"),),
+            ((8.5, 9.5, "MATH204", "A02"), (15.5, 16.5, "MATH200", "T01", "T02")),
+            ((8.5, 9.5, "MATH204", "A02"),),
+            ((8.5, 12, "MATH200", "A01"),),
+            ((8.5, 9.5, "MATH204", "A02"), (14.5, 15.5, "MATH204", "T03")),
+        ),
+    }
+
+    tables = calculate_tables(selected_courses, day_lengths)
+
+    # show all 6 tables
+    # for table in tables:
+    #     print(table)
+    #     print()
+
+    # this line takes considerable time
+    assert expected == set(deep_tuple(tables)), "calculate_tables failed"
+
+
+if __name__ == "__main__":
+    test_calculate_tables()
