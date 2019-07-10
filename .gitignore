@@ -4,4 +4,5 @@
 /.vscode/
 /.venv/
 /Protos/
+/.pytest_cache/
 # folder for prototypes
