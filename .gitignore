@@ -1,8 +1,7 @@
 *.py[cod]
 **/__pycache__/
-*jpeg
 /.vscode/
 /.venv/
 /Protos/
 /.pytest_cache/
-# folder for prototypes
+*have_*
