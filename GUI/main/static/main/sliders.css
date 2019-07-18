@@ -1,0 +1,33 @@
+/* Sliders */
+.dayTime-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: calc(100%-5rem);
+  height: 5px;
+  background: #eee;
+  outline: none;
+  opacity: 0.6;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.dayTime-slider:hover {
+  opacity: 1;
+}
+
+.dayTime-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--button-theme);
+  cursor: pointer;
+}
+
+.dayTime-slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #4caf50;
+  cursor: pointer;
+}

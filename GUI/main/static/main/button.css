@@ -1,0 +1,20 @@
+/* Buttons */
+button {
+  color: var(--button-theme);
+  font-size: 1rem;
+  font-weight: 450;
+  background-color: inherit;
+
+  padding: 0.4rem;
+  border-radius: 10px;
+  border: var(--button-theme) 2px solid;
+
+  position: relative;
+  left: calc(100% - 10rem);
+}
+
+button:hover {
+  background-color: var(--button-theme);
+  color: #eee;
+  cursor: pointer;
+}

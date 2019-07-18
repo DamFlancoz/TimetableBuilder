@@ -1,94 +1,10 @@
-$(function() {
+$(function () {
   /*
         TODO:
     */
 
-  //   Globals
-
-  selectedCourses = [];
-  courseSections = {}; // stores courses as keys and theirs sections' ids in array.
-  //{'CSC111':['A01','B01']}
-
-  // Cashing input fields
-  $term = $("#term");
-  $cName = $("#cName");
-  $cNum = $("#cNum");
-
-  $Mstart = $("#Mstart");
-  $Tstart = $("#Tstart");
-  $Wstart = $("#Wstart");
-  $Rstart = $("#Rstart");
-  $Fstart = $("#Fstart");
-
-  $Mend = $("#Mend");
-  $Tend = $("#Tend");
-  $Wend = $("#Wend");
-  $Rend = $("#Rend");
-  $Fend = $("#Fend");
-
-  //Cashing course-info window and tables window
-  $cInfo = $("#cInfo");
-  $tables = $("#tables");
-  $messages = $("#messages");
-
-  // Events listeners
-
-  //Reset button
-  $("#reset").on("click", function() {
-    $term.val("201901");
-    $cName.val("AGEI");
-    $cNum.val("");
-
-    $Mstart.val(0).trigger("input");
-    $Tstart.val(0).trigger("input");
-    $Wstart.val(0).trigger("input");
-    $Rstart.val(0).trigger("input");
-    $Fstart.val(0).trigger("input");
-
-    $Mend.val(24).trigger("input");
-    $Tend.val(24).trigger("input");
-    $Wend.val(24).trigger("input");
-    $Rend.val(24).trigger("input");
-    $Fend.val(24).trigger("input");
-
-    removeErrors();
-  });
-
-  // Range sliders, start vs end are consistent
-  $(".dayTime-slider.start").on("input", function() {
-    //get relative end slider
-    var $end = $(
-      "#" +
-        $(this)
-          .attr("id")
-          .substr(0, 1) +
-        "end"
-    );
-
-    // if less put it equal
-    if (parseInt($(this).val()) > parseInt($end.val())) {
-      $end.val($(this).val()).trigger("input");
-    }
-  });
-
-  $(".dayTime-slider.end").on("input", function() {
-    //get relative start slider
-    var $start = $(
-      "#" +
-        $(this)
-          .attr("id")
-          .substr(0, 1) +
-        "start"
-    );
-
-    // if more put it equal
-    if (parseInt($(this).val()) < parseInt($start.val())) {
-      $start.val($(this).val()).trigger("input");
-    }
-  });
-
   // Select course and put in tabs
-  $("#select-course").on("click", function() {
+  $("#select-course").on("click", function () {
     removeErrors();
 
     // check if course is already there
@@ -183,7 +99,7 @@ $(function() {
     function showNextPanel() {
       $(this).removeClass("active");
 
-      $("#" + panelToShow).show(0, function() {
+      $("#" + panelToShow).show(0, function () {
         $(this).addClass("active");
       });
     }
@@ -193,7 +109,7 @@ $(function() {
   function closeTab() {
     var $tab = $(this).closest("li");
 
-    // remove from seleced courses (if from $cinfo)
+    // remove from selected courses (if from $cinfo)
     if (
       $tab
         .parent()
@@ -220,41 +136,4 @@ $(function() {
     $tab.remove();
   }
 
-  //post error message
-  function postError(error) {
-    // create message, marked with error (class alreadyIn)
-    var $message = $("<li>")
-      .css({
-        color: "red"
-      })
-      .addClass(error);
-
-    switch (error) {
-      case "alreadyIn":
-        $message.text("Course already selected");
-        break;
-
-      case "invalidNum":
-        $message.text("No. is invalid");
-        break;
-
-      case "numNotGiven":
-        $message.text("No. not given");
-        break;
-
-      case "connection-error":
-        $message.text("Error Ocurred in connecting to back-end");
-    }
-
-    //Post it to user
-    $messages.append($message);
-  }
-
-  //removes error messages to user
-  function removeErrors() {
-    $(".alreadyIn").remove();
-    $(".invalidNum").remove();
-    $(".numNotGiven").remove();
-    $(".connection-error").remove();
-  }
 });
