@@ -26,3 +26,18 @@ To use this you will have to run the server and then click on link it shows. Jus
 ## Scrapping
 
 UVic does not provide an api for course in my knowledge so I am scrapping their website. I will try to reduce the load on servers by storing the information which is scraped once but for now this is only planned in Version GUI, might extend it to text version.
+
+## What I learned
+Here is what I have learned or used during making of Timetable Builder.
+
+### Tools
+- Html, Css, Javascript
+- JQuery, Ajax
+- Django
+
+### Topics
+- Working of http protocols
+- Using and building REST APIs
+- Interacting with Database
+- Building Complex data structures
+- Writing time-efficient algorithms
