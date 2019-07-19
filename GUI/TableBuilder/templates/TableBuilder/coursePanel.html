@@ -1,56 +1,49 @@
 <!-- html for table-->
-<table>
+<table id={{course}}>
 
+    {% if lectures %}
     <tr>
-        <th>Lectures</th>
+        <th colspan="5"> Lectures</th>
     </tr>
     {% for section in lectures %}
     <tr>
-        <td><input type='checkbox' id="{{course}}{{section.name}}" checked></input></td>
+        <td><input type='radio' name="lecture" value="{{section.name}}"></input></td>
         <td>{{section.name}}&nbsp;</td>
         <td>{{section.time}}&nbsp;</td>
         <td>{{section.days}}&nbsp;</td>
         <td>{{section.instructor}}&nbsp;</td>
     </tr>
     {% endfor %}
+    {% endif %}
 
+    {% if labs %}
     <tr>
-        <th style="text-align:left;">Labs</th>
+        <th colspan="5" style="text-align:left;">Labs</th>
     </tr>
     {% for section in labs %}
     <tr>
-        <td><input type='checkbox' id="{{course}}{{section.name}}" checked></input></td>
+        <td><input type='radio' name="lab" value="{{section.name}}"></input></td>
         <td>{{section.name}}&nbsp;</td>
         <td>{{section.time}}&nbsp;</td>
         <td>{{section.days}}&nbsp;</td>
         <td>{{section.instructor}}&nbsp;</td>
     </tr>
     {% endfor %}
+    {% endif %}
 
+    {% if tutorials %}
     <tr>
-        <th>Tutorials</th>
+        <th colspan="5">Tutorials</th>
     </tr>
     {% for section in tutorials %}
     <tr>
-        <td><input type='checkbox' id="{{course}}{{section.name}}" checked></input></td>
+        <td><input type='radio' name="tutorial" value="{{section.name}}"></input></td>
         <td>{{section.name}}&nbsp;</td>
         <td>{{section.time}}&nbsp;</td>
         <td>{{section.days}}&nbsp;</td>
         <td>{{section.instructor}}&nbsp;</td>
     </tr>
     {% endfor %}
+    {% endif %}
+
 </table>
-
-<br>
-
-<label for='modeSectionSelection'>Mode:&nbsp</label>
-<input type='radio' name="modeSectionSelection" id="modeSectionSelection">Only use selected&nbsp</input>
-<input type='radio' name="modeSectionSelection" id="modeSectionSelection">Don't use selected&nbsp</input>
-
-<br><br>
-
-<button id="make-tables">Make Tables</button>
-
-<script text="text/javascript">
-    $('#make-tables').on('click', alert);
-</script>
