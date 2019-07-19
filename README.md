@@ -10,7 +10,7 @@ You can choose when in day you want to get off or start, eg. you might be fine w
 
 This version fulfils original scope project. You can get sections recommended and see crns to apply. Main stuff is complete here and will be updated sparsely.
 
-## Version GUI (in working)
+## Version GUI (in work)
 
 This is a bit of an extension, an important one. It introduces a browser GUI for ease of use. Basically a web page with HTML, CSS and jQuery using AJAX to talk with backend server. In beginning I intended it to be just a place to input courses (and day constraints) and then decide between timetables but when making timetable for this semester I realized how good it is to be able to tweak tables your self a bit. Hence, with some inspiration from schedulecourses.com, I will also add feature to tweak.
 
