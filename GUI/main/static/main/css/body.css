@@ -1,0 +1,14 @@
+body {
+  --button-theme: rgb(0, 171, 236);
+  --panel-back: rgb(200, 200, 200);
+
+  background-color: rgb(141, 141, 141);
+  background-image: url("background.jpeg");
+  background-size: cover;
+  background-blend-mode: multiply;
+
+  min-height: 100vh;
+
+  color: rgb(87, 86, 86);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}

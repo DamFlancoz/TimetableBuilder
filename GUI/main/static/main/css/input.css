@@ -1,0 +1,36 @@
+.input {
+  background-color: var(--panel-back);
+  border-radius: 1vh;
+  padding: 0.5rem 1.5rem;
+  margin: 0.5rem;
+}
+
+.messages {
+  padding: 0;
+  list-style: none;
+}
+
+.input label {
+  margin: 4px 2px;
+}
+
+.input select,
+.input input {
+  margin: 4px 8px 4px 0px;
+}
+
+.input button {
+  padding: 0.3rem;
+  border-radius: 10px;
+  border: var(--button-theme) 2px solid;
+
+  background-color: inherit;
+  color: var(--button-theme);
+  font-weight: 450;
+}
+
+button:hover {
+  background-color: var(--button-theme);
+  color: #eee;
+  cursor: pointer;
+}

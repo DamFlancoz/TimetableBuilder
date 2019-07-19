@@ -1,7 +1,7 @@
 $(function () {
   /*
-        TODO:
-    */
+      TODO:
+  */
 
   // Select course and put in tabs
   $("#select-course").on("click", function () {

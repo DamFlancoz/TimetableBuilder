@@ -1,11 +1,12 @@
 {% load static %}
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
 
-    <title> TimeTable Builder </title>
+  <title> TimeTable Builder </title>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -19,157 +20,77 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <!-- Custom styles/scripts -->
-  <link rel="stylesheet" href="{% static 'main/tabs.css' %}">
-  <link rel="stylesheet" href="{% static 'main/sliders.css' %}">
-  <link rel="stylesheet" href="{% static 'main/components.css' %}">
-  <link rel="stylesheet" href="{% static 'main/main.css' %}">
-  <script src="{% static 'main/globals.js' %}"></script>
-  <script src="{% static 'main/messages.js' %}"></script>
-  <script src="{% static 'main/sliders.js' %}"></script>
-  <script src="{% static 'main/reset.js' %}"></script>
-  <script src="{% static 'main/main.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'main/css/tabs.css' %}">
+  <link rel="stylesheet" href="{% static 'main/css/sliders.css' %}">
+  <link rel="stylesheet" href="{% static 'main/css/body.css' %}">
+  <link rel="stylesheet" href="{% static 'main/css/layout.css' %}">
+  <link rel="stylesheet" href="{% static 'main/css/input.css' %}">
+  <link rel="stylesheet" href="{% static 'main/css/courses.css' %}">
+  <link rel="stylesheet" href="{% static 'main/css/table.css' %}">
+  <script src="{% static 'main/js/globals.js' %}"></script>
+  <script src="{% static 'main/js/messages.js' %}"></script>
+  <script src="{% static 'main/js/sliders.js' %}"></script>
+  <script src="{% static 'main/js/reset.js' %}"></script>
+  <script src="{% static 'main/js/main.js' %}"></script>
 
 </head>
 
 <body>
 
-    <!-- Navigation bar -->
+  <!-- course-input -->
+  <div class="input">
 
-    <header>
-        <ul>
-            <li id="reset"> Reset </li>
-            <li> Help </li>
-        </ul>
+    <h1> Select Courses </h1>
 
+    <!-- Messages to user -->
+    <ul id="messages" class="messages"></ul>
 
-    </header>
+    <form class="form-inline" id="courseInput">
 
-    <!-- Navigation bar -- end -->
+      <!-- Term input -->
+      <div class="form-group mr-sm-4">
+        <label for="term" class="mr-sm-2">Term:</label>
+        <select id="term" class="form-control">
 
+          {% for option in termOptions %}
+          <option value="{{option}}">{{option}}</option>
+          {% endfor %}
 
+        </select>
+      </div>
 
-    <!-- Main content -->
-    <main>
+      <!-- Course name input -->
+      <div class="form-group mr-sm-4">
+        <label for="cName" class="mr-sm-2">Subject:</label>
+        <select id="cName" class="form-control">
 
-        <div class="input-pane">
+          {% for subj in subjs%}
+          <option value="{{subj}}">{{subj}}</option>
+          {% endfor %}
 
-            <h1> Input Place </h1>
+        </select style="width:100px">
+      </div>
 
-            <label for="term">Term</label>
-            <select id="term">
+      <!-- Course no. input -->
+      <div class="form-group">
+        <label for="num" class="mr-sm-2">No.:</label>
+        <input class="form-control" name="num" min=100 max=999 size=5 id="cNum">
 
-                {% for option in termOptions %}
-                <option value="{{option}}">{{option}}</option>
-                {% endfor %}
+        <button class="form-group ml-4" id="select-course" type="button">Select Course</button>
+      </div>
 
-            </select>
+    </form>
 
-            &nbsp&nbsp&nbsp
+  </div>
 
-            <label for="cName">Subject</label>
-            <select id="cName">
+  <!-- Course-tabs -->
+  <div class="tab-panels courses" id="cInfo">
+    <ul class="tabs"></ul>
+  </div>
 
-                {% for subj in subjs%}
-                <option value="{{subj}}">{{subj}}</option>
-                {% endfor %}
-
-            </select style="width:100px">
-
-            &nbsp&nbsp&nbsp
-
-            <label for="num">No.</label>
-            <input name="num" min=100 max=999 size=5 id="cNum">
-
-            <br><br>
-
-            <ul id="messages" class="messages">
-            </ul>
-
-            <button id="select-course">Select Course</button>
-
-            <br><br>
-
-            <table>
-
-                <tr>
-                    <th>Days</th>
-                    <th>Start (24 hr)</th>
-                    <th></th>
-                    <th>End (24 hr)</th>
-                </tr>
-
-                {% for day in days %}
-
-                <tr>
-                    <td> {{day}} </td>
-
-                    <td style="padding-right: 1rem;">
-                        <form style="display: inline" oninput="x.value=parseInt(a.value)">
-
-                            0
-                            <input type="range" id="{{day}}start" name="a" value="0" min="0" max="24" step="0.5"
-                                class="dayTime-slider start">
-                            24
-
-                            &nbsp&nbsp
-
-                            <strong><output name="x" for="a">0</output></strong>
-
-                        </form>
-                    </td>
-
-                    <td> - </td>
-
-                    <td style="padding-left: 1rem;">
-                        <form style="display: inline" oninput="x.value=parseInt(a.value)">
-
-                            <strong><output name="x" for="a">24</output></strong>
-
-                            &nbsp &nbsp
-                            0
-                            <input type="range" id="{{day}}end" name="a" value="24" min="0" max="24" step="0.5"
-                                class="dayTime-slider end">
-                            24
-
-                        </form>
-                    </td>
-                </tr>
-
-                {% endfor %}
-
-            </table>
-
-        </div>
-
-        <!-- Course-tabs Place -->
-
-        <div class="tab-panels course-tabs" id="cInfo">
-
-            <ul class="tabs">
-            </ul>
-
-        </div>
-
-        <!-- table-tabs Place -->
-
-        <div class='tab-panels table-tabs' id="tables">
-
-            <ul class="tabs">
-            </ul>
-            <p>hello World</p>
-        </div>
-
-    </main>
-
-    <!-- Main content -- end -->
-
-    <footer>
-        <ul>
-            <li><i class="fa fa-github"></i></li>
-            <li><i class="fa fa-linkedin-square"></i></li>
-        </ul>
-
-    </footer>
+  <!-- Timetable -->
+  <div class='table' id="table">
+  </div>
 
 </body>
 
