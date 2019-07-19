@@ -88,7 +88,7 @@ def cInfoApi(request):
         pass  # TODO
 
     context = {
-        'course': course.name+course.num,
+        "course": course.name + course.num,
         "lectures": [
             {
                 "name": s.section,
@@ -120,30 +120,29 @@ def cInfoApi(request):
 
     data = {
         "message": "Success",
-        "html": render_to_string("TableBuilder/coursePanel.html",context=context),
+        "html": render_to_string("TableBuilder/coursePanel.html", context=context),
         "course": course_name + " " + course_num,
-        'sections': [s.section for t in course for s in t]
+        "sections": [s.section for t in course for s in t],
     }
 
     return JsonResponse(data)
 
+
 def getTableApi(request):
 
     term = request.GET["term"]
-    '''
+    """
     courses = {'Math101':[sections], 'CSC111':[sections]}
-    '''
+    """
     selected_courses = request.GET["selectedCourses"]
     day_constraints = request.GET["dayConstraints"]
-
 
     context = {}
 
     data = {
         "message": "Success",
-        "htmls": [render_to_string("TableBuilder/tablepanel.html",context=context)
-        ],
-        "headers": []
+        "htmls": [render_to_string("TableBuilder/tablepanel.html", context=context)],
+        "headers": [],
     }
 
     return JsonResponse(data)

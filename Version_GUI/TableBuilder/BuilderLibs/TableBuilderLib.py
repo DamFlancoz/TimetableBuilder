@@ -38,45 +38,45 @@ class Table:
         self.F = []
 
         # each element is a list of sections which have same time
-        self.sections = [] 
-        
+        self.sections = []
+
         #adds Course('start) and Course('end') to each day
-        #self.addPaddingCourses() 
-        
+        #self.addPaddingCourses()
+
         #Course('break') may also be added
-        
+
     def __getitem__(self,i):
-        
+
         # allows t['M'] to access t.M
         # Used in inserting in tables
-        
+
         return eval('self.'+i)
-        
+
     def __iter__(self):
-        
+
         yield self.M
         yield self.T
         yield self.W
         yield self.R
         yield self.F
-        
+
     def __str__(self): #TODO: imporve this
-        
+
         # course_rep eg. [13,14,'CSC111','A01']
         '''
         return ''+'\n\n-'.join([ '\n '.join([ '(' + str(course_rep[0]) + ','
                                              +str(course_rep[1]) + ') '
-                                             +'\n\t'.join([str(i) 
-                                                           for i in course_rep[2:]]) 
-                                         for course_rep in self[day]]) 
+                                             +'\n\t'.join([str(i)
+                                                           for i in course_rep[2:]])
+                                         for course_rep in self[day]])
                                 for day in 'MTWRF'])
         '''
 
         return '\n'.join(day +': '+str(table)[1:-1] for day,table in zip('MTWRF',self))
-    
+
     def addPddingCourses(self):
         #adds Course('start) and Course('end') to each day
-        
+
         for day in self:
             day+=[Course('start',''),Course('end','')]
             day[0].time = (0,0)
@@ -99,7 +99,7 @@ class Course:
         self.labs = labs
         self.tutorials = tutorials
 
-    def __eq__(self,course): 
+    def __eq__(self,course):
 
         if (type(course) == list and len(course) == 2): #Used in main->rem Command, takes [course,num]
             return course[0] == self.course and course[1] == self.num
@@ -107,12 +107,12 @@ class Course:
         elif (type(course) == Course):
             return (self.course == course.course
                     and self.num == course.num
-                    and self.lectures == course.lectures 
+                    and self.lectures == course.lectures
                     and self.labs == course.labs
                     and self.tutorials == course.tutorials)
         else :
             return NotImplemented
-                    
+
 
     def __ne__(self,course): #Used in main-> rem Command, takes [course,num]
         return not self == course
@@ -141,7 +141,7 @@ class Course:
         yield self.labs
         yield self.tutorials
 
-    
+
 
 
 class Section:
@@ -156,37 +156,37 @@ class Section:
         self.days = ''
         self.place = ''
         self.instructor = ''
-        
-    def __eq__(self,other): 
-        
+
+    def __eq__(self,other):
+
         # Used in adding sections with same timings to table in eval table and in its test
         # Gives true if of same timmings nad course, doesnot need to be exactly same.
         # eg: T01 and T02 can be equal.
-        if ((type(other) == tuple or type(other) == list) and len(other) == 4): 
+        if ((type(other) == tuple or type(other) == list) and len(other) == 4):
             return (other[0] == self.time[0] and other[1] == self.time[1]
                     and other[2] == self.cName+self.cNum)
-        
+
         elif (type(other) == Section):
-            return (other.time == self.time 
+            return (other.time == self.time
                     and other.days == self.days
                     and other.cName == self.cName
                     and other.cNum == self.cNum)
-        
+
         else:
             return NotImplemented
 
-    def __ne__(self,other): 
+    def __ne__(self,other):
         return (not self == other)
 
     def __str__(self):
-        return ('Course: ' + self.cName + ' ' + self.cNum 
+        return ('Course: ' + self.cName + ' ' + self.cNum
                 + ' | Section: ' + self.section
                 + ' | Time: ' + str(self.time)
                 + ' | Days: ' + self.days
                 )
-        
+
     def __rep__(self):
-        return('Course: ' + self.cName + ' ' + self.cNum 
+        return('Course: ' + self.cName + ' ' + self.cNum
                 + ' | Section: ' + self.section
                 + ' | Time: ' + str(self.time)
                 + ' | Days: ' + self.days
@@ -198,11 +198,11 @@ class Section:
         Converts time from webscraper to tuple of start and end integers.
         eg. '8:30 am - 9:50 am' = (8.5, 10)
         '''
-        
+
         time = time.split(' - ')  #[['3:30 pm','4:30 pm']
 
         # For start('3:30 pm') and end ('4:30 pm') terms
-        for i in range(2): 
+        for i in range(2):
 
             t = time[i][:5].split(':') #converts to '3:30 ' or '10:50'
             t[0] = int(t[0].strip())   #takes hour eg. 3 or 10
@@ -229,18 +229,18 @@ Used in WebScrapper
 '''
 class NoSectionsAvailable(Exception):
     def __init__(self,course):
-        
+
         super().__init__('')
         self.course=course
-        
-        
+
+
 '''
 raised if no sections of a type can fit due to inputted time constraints
 eg. you cannot enter any tutroial of Engr 141 because they are all at night
 '''
 class NoSectionOfTypeFit(Exception):
     def __init__(self,course):
-        
+
         super().__init__('')
         self.course=course
 
@@ -260,32 +260,32 @@ class NotFit(Exception):
 Takes: term code, Course Object with course name and course no.
 Returns: (str)the html page containing classes information
 '''
-def getPage(TERM,course):
+def get_course_html(TERM,course):
     Url = 'https://www.uvic.ca/BAN1P/bwckschd.p_get_crse_unsec'
     Data = 'term_in='+TERM+'&sel_subj=dummy&sel_day=dummy&sel_schd=dummy&sel_insm=dummy&sel_camp=dummy&sel_levl=dummy&sel_sess=dummy&sel_instr=dummy&sel_ptrm=dummy&sel_attr=dummy&sel_subj='+course.course+'&sel_crse='+course.num+'&sel_title=&sel_schd=%25&sel_insm=%25&sel_from_cred=&sel_to_cred=&sel_camp=%25&sel_levl=%25&sel_ptrm=%25&sel_instr=%25&begin_hh=0&begin_mi=0&begin_ap=a&end_hh=0&end_mi=0&end_ap=a'
     # Data contains course.course and course.num further down
- 
+
     htmlPage = urlopen(url=Url, data=Data.encode()).read().decode()
     htmlLines = htmlPage.split('\n')
-    
+
     if (htmlLines[103] == 'No classes were found that meet your search criteria'
         or htmlLines[102] == 'No classes were found that meet your search criteria'):
         raise(NoSectionsAvailable(course))
-    
-    return htmlPage 
+
+    return htmlPage
 
 
 
 
-def getCourse(course,coursePageHtml):
-    
-    pageSoup = bSoup(coursePageHtml,'lxml')       # parsed html, soup
+def put_sections_in_course(course,coursePageHtml):
+
+    page_soup = bSoup(coursePageHtml,'lxml')       # parsed html, soup
 
     '''
     Gives back table of all classes and other tables in list. [0] takes needed
     table.
     '''
-    sectionTable = pageSoup.findAll('table',class_="datadisplaytable")[0]
+    section_table = page_soup.findAll('table',class_="datadisplaytable")[0]
 
     '''
     Each class has 4 index associated,
@@ -294,22 +294,22 @@ def getCourse(course,coursePageHtml):
     - header for time, days etc. inside other info (i+2)
     - values for time, days etc. inside other info (i+3)
     '''
-    sectionList = sectionTable.findAll('tr')
+    section_list = section_table.findAll('tr')
 
     # parses sections
-    for i in range(0,len(sectionList),4):
-        if 'Main Campus' in str(sectionList[i+1]):
+    for i in range(0,len(section_list),4):
+        if 'Main Campus' in str(section_list[i+1]):
             section = Section()
-            
-            titleList = str(sectionList[i]).split(' - ')
-            section.section = titleList[3][:3] #some tags were also coming at the end
-            section.crn = titleList[1]
 
-            courseName = titleList[2].split(' ') #eg ['CSC','111']
-            section.cName = courseName[0]
-            section.cNum = courseName[1]
+            title_list = str(section_list[i]).split(' - ')
+            section.section = title_list[3][:3] #some tags were also coming at the end
+            section.crn = title_list[1]
 
-            info = sectionList[i+3].findAll('td')
+            course_name = title_list[2].split(' ') #eg ['CSC','111']
+            section.cName = course_name[0]
+            section.cNum = course_name[1]
+
+            info = section_list[i+3].findAll('td')
             section.setTime(str(info[1].text)) # turns str time to tuple
             section.days = str(info[2].text)
             section.place = str(info[3].text)
@@ -354,18 +354,18 @@ def insertInTable(section,table):
         #inserting in free day
         if table[day]==[]:
             table[day].insert(0,toInsert)
-    
+
         #inserting at start of day
         elif table[day][0][0] >= time[1]:
             table[day].insert(0,toInsert)
-            
+
         else:
             #inserting during the day
             for i in range(len(table[day])-1):
                 if table[day][i][1] <= time[0] and table[day][i+1][0] >= time[1]:
                     table[day].insert(i+1,toInsert)
                     break
-    
+
             #inserting at end of day
             else:
                 if table[day][-1][1] <= time[0]:
@@ -374,7 +374,7 @@ def insertInTable(section,table):
                     raise NotFit()
 
     table.sections.append([section])
-    
+
     return table
 
 '''
@@ -391,12 +391,12 @@ def insertSameInTable(section,table):
         if table[day][i][0] == time[0] and time[1] == table[day][i][1]:
             table[day][i].append(section.section)
             break
-    
+
     for s in table.sections:
         if s[0] == section:
             s.append(section)
             break
-     
+
     return table
 
 def evalTable(selectedCourses,dayLengths):
@@ -405,22 +405,22 @@ def evalTable(selectedCourses,dayLengths):
 
     #Acts as buffer for new tables made in each type for each section
     newTables={}
-    
+
     for course in selectedCourses:
         for Type in course:
             for section in Type:
-                
+
                 # skip if class falls out of required schedule
                 if not checkSectionWithDayLengths(section,dayLengths): continue
-                    
+
                 for i,t in enumerate(tables):
 
-                    
+
 
                     # i is in newTables[(time,section.days,i)] so that a section does keep puting itself
                     #  eg 'A01' in next iterations of tables sees its previous entry in new tables and puts
                     #      itself wih it again.
-                    # But it allows other section with same day and time to find the table 
+                    # But it allows other section with same day and time to find the table
 
                     #[start,end] eg [11,13.5] for'11am-1:20pm'
                     time = section.time
@@ -432,19 +432,19 @@ def evalTable(selectedCourses,dayLengths):
                             table = insertInTable(section,table)
 
                             newTables[(time,section.days,i)]= table
-                            
+
                         except NotFit:
                             continue
                     else:
                         newTables[(time,section.days,i)] = insertSameInTable(section,newTables[(time,section.days,i)])
-                        
+
             # if no section of a type can be added then
             if  (not newTables) and Type: raise NoSectionOfTypeFit(course)
-            
+
             # If at start a Type is [] it makes table [] in comprehension
-            # but you want it to remain a free table (default value) so loop 
+            # but you want it to remain a free table (default value) so loop
             # for tables can run.
-                        
+
             tables = list(newTables.values()) if newTables else tables
             newTables = {}
 
@@ -467,7 +467,7 @@ Use
 - End <MR or all> at 10
 - Show, to see selected courses
 - Calc to Calculate all the tables
-- ShowTable to see tables (TODO) 
+- ShowTable to see tables (TODO)
 - Quit to quit
 ''')
 
@@ -481,7 +481,7 @@ Use
 
             #remove command word and get the argument
             inp = inp.replace('term','').strip()
-            
+
             try:
                 term = setTerm(inp)
             except:
@@ -492,7 +492,7 @@ Use
 
             #removes command word and makes list of arguments
             inp = inp.replace('add','').split(',')
-            
+
             for course in inp:
 
                 course = processArgToCourse(course.strip()) # returns [name,number]
@@ -505,7 +505,7 @@ Use
 
             #removes command word and makes list of arguments
             inp = inp.replace('remove','').replace('rem','').replace('rmv','').split(',')
-                    
+
             for course in inp:
 
                 course = processArgToCourse(course.strip()) # evalCourse returns [name,number]
@@ -524,7 +524,7 @@ Use
             print() #moves cursor to next line
             print(i+': '+str(dayLengths[i]) for i in dayLengths)
 
-        elif 'start' in inp and 'at' in inp: 
+        elif 'start' in inp and 'at' in inp:
             inp = inp.split(' ')
 
             if inp[1] == 'all':
@@ -542,7 +542,7 @@ Use
                     for day in inp[1].upper():
                         dayLengths[day][0] = int(inp[3])
 
-        elif 'end' in inp and 'at' in inp: 
+        elif 'end' in inp and 'at' in inp:
             inp = inp.split(' ')
 
             if inp[1] == 'all':
@@ -562,17 +562,17 @@ Use
 
         # Evaluates TimeTable
         elif ('calc' in inp) or ('eval table' in inp) or ('get tables' in inp):
-            
+
             # Adds course info from web to Course Object
             try:
-                selectedCourses = [getCourse(course,getPage(term,course)) for course in selectedCourses]
-            
+                selectedCourses = [put_sections_in_course(course,get_course_html(term,course)) for course in selectedCourses]
+
                 tables = evalTable(selectedCourses,dayLengths)
-            
+
             except NoSectionsAvailable as e:
-                
+
                 selectedCourses.remove(e.course)
-                
+
                 print(e.course.course,e.course.num,'is not available in',term)
                 print('Removed the course.')
                 print('You may want to add a replacement course.')
@@ -584,14 +584,14 @@ Use
                 print('Change the Time restrictions or remove the course')
 
         elif 'showtable' in inp:
-            
+
             #TODO
 
             print(tables[0])
 
-        # Exits program            
+        # Exits program
         elif inp in ['quit','exit','q','done']:
-            
+
             break
 
         # Excecutes a python command or deems input invalid
@@ -615,7 +615,7 @@ return - term value equal accordingly
 '''
 def setTerm(inp):
     if ('next' in inp) or ('n' in inp):
-                
+
         # gives tuple (year,month,date,h,min,s,weekday, etc.)
         time = localtime()
 

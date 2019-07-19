@@ -1,14 +1,15 @@
-'''
+"""
 This module provides functionality to calculate time tables.
-Use eval_table.
-'''
+Use calculate_tables.
+"""
 
 from copy import deepcopy  # For testing eval table
 from time import localtime  # for seting term
 
 from .classes import Table, Course, Section, NotFit, NoSectionOfTypeFit
 
-def eval_table(selected_courses, day_lengths):
+
+def calculate_tables(selected_courses, day_lengths):
 
     tables = [Table()]  # free weekby default
 
@@ -63,9 +64,9 @@ def eval_table(selected_courses, day_lengths):
 
 
 def check_section_with_day_lengths(section, day_lengths):
-    '''
+    """
     returns True if sectionis compatible with day_lengths
-    '''
+    """
     for day in section.days:
         if (
             section.time[0] < day_lengths[day][0]
@@ -77,19 +78,24 @@ def check_section_with_day_lengths(section, day_lengths):
 
 
 def insert_in_table(section, table):
-    '''
+    """
     Checks timings for section and inserts them table.
     Raises NotFit Error if any class on a day cannot fit in.
 
     inserts - [start,end,course+courseno.,section]
     eg. [12.5,13.5,'MATH101','T01']
-    '''
+    """
 
     time = section.time
 
     # Waring this makes the lists in all days point to sam list
     # if you make change in one to_insert in one day, all of them change
-    to_insert = [time[0], time[1], section.course_name + section.course_num, section.section]
+    to_insert = [
+        time[0],
+        time[1],
+        section.course_name + section.course_num,
+        section.section,
+    ]
 
     for day in section.days:
         # inserting in free day
@@ -120,10 +126,10 @@ def insert_in_table(section, table):
 
 
 def insert_same_in_table(section, table):
-    '''
+    """
     Inserts in a section which has same timings as another inserted class
     eg. [12.5,13.5,'MATH101','T01'] to [12.5,13.5,'MATH101','T01','T02']
-    '''
+    """
     time = section.time
     day = section.days[0]
 
@@ -146,18 +152,18 @@ def insert_same_in_table(section, table):
 
 
 def set_term(inp):
-    '''
+    """
     set_term
     takes - input argument for term and
     return - term value equal accordingly
-    '''
+    """
 
     # gives tuple (year,month,date,h,min,s,weekday, etc.)
     time = localtime()
 
     if ("next" in inp) or ("n" in inp):
 
-        time[1] = 1 if time[1]+4 == 13 else time[1]+4
+        time[1] = 1 if time[1] + 4 == 13 else time[1] + 4
 
     elif ("current" in inp) or ("curr" in inp):
         pass
@@ -183,4 +189,3 @@ def set_term(inp):
 term = set_term("curr")  # term chosen
 selected_courses = []  # Course objects
 day_lengths = {"M": [0, 24], "T": [0, 24], "W": [0, 24], "R": [0, 24], "F": [0, 24]}
-
