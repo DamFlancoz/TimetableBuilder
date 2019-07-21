@@ -1,31 +1,29 @@
 from django.db import models
 
 
-class Sections(models.Model):
+class Course_db(models.Model):
 
-    # can access course through s.course_set.all()/.filter etc
-    term = models.IntegerField()
+    term = models.CharField(max_length=6)
+    name = models.CharField(max_length=100)
+    num = models.CharField(max_length=3)
+
+    def __str__(self):
+        return self.name + " " + self.num + " " + self.term
+
+
+class Section_db(models.Model):
+
+    course = models.ForeignKey(Course_db, on_delete=models.CASCADE)
+    type = models.CharField(
+        max_length=2, choices=[("LE", "Lecture"), ("LA", "Lab"), ("TU", "Tutorial")]
+    )
     section = models.CharField(max_length=100)
     crn = models.IntegerField(unique=True)
-    sTime = models.IntegerField()
-    eTime = models.IntegerField()
-    days = models.CharField(max_length=100)
+    sTime = models.DecimalField(max_digits=3, decimal_places=1)
+    eTime = models.DecimalField(max_digits=3, decimal_places=1)
+    days = models.CharField(max_length=5)
     place = models.CharField(max_length=100)
     instructor = models.CharField(max_length=100)
 
-
-class Courses(models.Model):
-
-    term = models.IntegerField()
-    course = models.CharField(max_length=100)
-    num = models.IntegerField()
-
-    lectures = models.ForeignKey(
-        Sections, blank=True, on_delete=models.CASCADE, related_name="lectureOf"
-    )
-    labs = models.ForeignKey(
-        Sections, on_delete=models.CASCADE, blank=True, related_name="LabOf"
-    )
-    tutorials = models.ForeignKey(
-        Sections, on_delete=models.CASCADE, blank=True, related_name="tutorialOf"
-    )
+    def __str__(self):
+        return str(self.course) + " " + self.section

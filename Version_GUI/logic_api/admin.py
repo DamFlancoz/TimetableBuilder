@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from .models import Courses, Sections
+from .models import Course_db, Section_db
 
 # Register your models here.
-admin.site.register(Sections)
-admin.site.register(Courses)
+admin.site.register(Section_db)
+admin.site.register(Course_db)

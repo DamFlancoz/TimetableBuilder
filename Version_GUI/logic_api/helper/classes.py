@@ -1,6 +1,6 @@
-'''
+"""
 This module contains all the classes used.
-'''
+"""
 
 
 class Table:
@@ -35,20 +35,12 @@ class Table:
         yield self.R
         yield self.F
 
-    def __str__(self):  # TODO: imporve this
+    def __str__(self):  # TODO: improve this
 
         # course_rep eg. [13,14,'CSC111','A01']
         return "\n".join(
             day + ": " + str(table)[1:-1] for day, table in zip("MTWRF", self)
         )
-
-    def addPddingCourses(self):
-        # adds Course('start) and Course('end') to each day
-
-        for day in self:
-            day += [Course("start", ""), Course("end", "")]
-            day[0].time = (0, 0)
-            day[1].time = (24, 24)
 
 
 class Course:
@@ -122,7 +114,7 @@ class Section:
     def __eq__(self, other):
 
         # Used in adding sections with same timings to table in eval table and in its test
-        # Gives true if of same timmings nad course, doesnot need to be exactly same.
+        # Gives true if of same timings nad course, doesnot need to be exactly same.
         # eg: T01 and T02 can be equal.
         if (type(other) == tuple or type(other) == list) and len(other) == 4:
             return (
@@ -175,10 +167,10 @@ class Section:
 
     def setTime(self, time):
 
-        '''
+        """
         Converts time from webscraper to tuple of start and end integers.
         eg. '8:30 am - 9:50 am' = (8.5, 10)
-        '''
+        """
 
         time = time.split(" - ")  # [['3:30 pm','4:30 pm']
 
@@ -206,10 +198,10 @@ class Section:
 
 # Exceptions
 
-'''
+"""
 Raised if the Uvic says sections for course are not available.
 Used in WebScrapper
-'''
+"""
 
 
 class NoSectionsAvailableOnline(Exception):
@@ -218,11 +210,11 @@ class NoSectionsAvailableOnline(Exception):
         self.course = course
 
 
-'''
-raised if no sections of a type can fit due to inputed time constraints
-eg. you cannot enter any tutroial of Engr 141 because they are all at night
+"""
+raised if no sections of a type can fit due to inputted time constraints
+eg. you cannot enter any tutorial of Engr 141 because they are all at night
     and you said you dont want any night stuff.
-'''
+"""
 
 
 class NoSectionOfTypeFit(Exception):
@@ -231,10 +223,10 @@ class NoSectionOfTypeFit(Exception):
         self.course = course
 
 
-'''
+"""
 Raised if a section doesnot fit in a timetable
 Used in EvalTable. Not an error.
-'''
+"""
 
 
 class NotFit(Exception):
