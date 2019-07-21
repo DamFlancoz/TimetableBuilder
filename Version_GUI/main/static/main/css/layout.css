@@ -1,11 +1,12 @@
 body {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 4rem auto auto 1fr;
+  grid-template-rows: 4rem auto auto auto 1fr;
   grid-template-areas:
     ". . . . ."
-    "input input table_ table_ table_"
-    "courses courses table_ table_ table_"
+    "table_ table_ table_ table_ table_"
+    "input input courses courses courses"
+    ". . courses courses courses"
     ". . . . .";
 }
 
