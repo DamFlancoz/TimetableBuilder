@@ -19,6 +19,13 @@ class Courses(models.Model):
     term = models.IntegerField()
     course = models.CharField(max_length=100)
     num = models.IntegerField()
-    lectures = models.ManyToManyField(Sections, related_name="lectureOf")
-    labs = models.ManyToManyField(Sections, related_name="LabOf")
-    tutorials = models.ManyToManyField(Sections, related_name="tutorialOf")
+
+    lectures = models.ForeignKey(
+        Sections, blank=True, on_delete=models.CASCADE, related_name="lectureOf"
+    )
+    labs = models.ForeignKey(
+        Sections, on_delete=models.CASCADE, blank=True, related_name="LabOf"
+    )
+    tutorials = models.ForeignKey(
+        Sections, on_delete=models.CASCADE, blank=True, related_name="tutorialOf"
+    )

@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse  # for Ajax
 from django.template.loader import render_to_string  # (template,context)
 
-from .BuilderLibs.coursesinfo import get_course_info
-from .BuilderLibs.classes import NoSectionsAvailableOnline
+from .helper.coursesinfo import get_course_info
+from .helper.classes import NoSectionsAvailableOnline
 
 """
 HttpResponse(status=400), client side error, Bad Request
@@ -84,7 +84,7 @@ def cInfoApi(request):
     try:
         course = get_course_info(term, [course_name, course_num])
 
-    except NoSectionsAvailableOnline as e:
+    except NoSectionsAvailableOnline:
         pass  # TODO
 
     context = {
@@ -120,7 +120,7 @@ def cInfoApi(request):
 
     data = {
         "message": "Success",
-        "html": render_to_string("TableBuilder/coursePanel.html", context=context),
+        "html": render_to_string("logic_api/coursePanel.html", context=context),
         "course": course_name + " " + course_num,
         "sections": [s.section for t in course for s in t],
     }
@@ -130,18 +130,18 @@ def cInfoApi(request):
 
 def getTableApi(request):
 
-    term = request.GET["term"]
+    # term = request.GET["term"]
     """
     courses = {'Math101':[sections], 'CSC111':[sections]}
     """
-    selected_courses = request.GET["selectedCourses"]
-    day_constraints = request.GET["dayConstraints"]
+    # selected_courses = request.GET["selectedCourses"]
+    # day_constraints = request.GET["dayConstraints"]
 
     context = {}
 
     data = {
         "message": "Success",
-        "htmls": [render_to_string("TableBuilder/tablepanel.html", context=context)],
+        "html": [render_to_string("TableBuilder/tablepanel.html", context=context)],
         "headers": [],
     }
 

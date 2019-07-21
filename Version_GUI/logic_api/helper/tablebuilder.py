@@ -11,7 +11,7 @@ from .classes import Table, Course, Section, NotFit, NoSectionOfTypeFit
 
 def calculate_tables(selected_courses, day_lengths):
 
-    tables = [Table()]  # free weekby default
+    tables = [Table()]  # free weekly default
 
     # Acts as buffer for new tables made in each type for each section
     new_tables = {}
@@ -65,7 +65,7 @@ def calculate_tables(selected_courses, day_lengths):
 
 def check_section_with_day_lengths(section, day_lengths):
     """
-    returns True if sectionis compatible with day_lengths
+    returns True if section is compatible with day_lengths
     """
     for day in section.days:
         if (
