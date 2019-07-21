@@ -7,7 +7,7 @@
 .tab-panels ul li {
   list-style-type: none;
   display: inline-block;
-  background: var(--panel-back);
+  background: #999;
   margin: 0;
   padding: 3px 10px;
   border-radius: 10px 10px 0 0;
@@ -18,12 +18,12 @@
 
 .tab-panels ul li:hover {
   color: #fff;
-  background: #999;
+  background: #aaa;
 }
 
 .tab-panels ul li.active {
   color: #fff;
-  background: #999;
+  background: var(--panel-back);
   cursor: default;
 }
 
