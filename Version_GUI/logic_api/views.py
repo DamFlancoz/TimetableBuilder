@@ -4,33 +4,13 @@ from django.template.loader import render_to_string  # (template,context)
 
 from .models import Course_db
 
-from .helper.coursesinfo import get_course_info
-from .helper.classes import NoSectionsAvailableOnline
+from .helper.coursesinfo import get_course_info, NoSectionsAvailableOnline
 
 """
 HttpResponse(status=400), client side error, Bad Request
 HttpResponseBadRequest(content), Acts just like HttpResponse but uses a 400 status code
 render(request, 'template.html', status=204)
 """
-
-# helper functions
-def save_course(course, term):
-    c = Course_db(term=term, name=course.name, num=course.num)
-    c.save()
-
-    for t, type_ in zip(("LE", "LA", "TU"), course):
-        for section in type_:
-            c.section_db_set.create(  # pylint:disable=no-member
-                type=t,
-                section=section.section,
-                crn=section.crn,
-                sTime=section.time[0],
-                eTime=section.time[1],
-                days=section.days,
-                place=section.place,
-                instructor=section.instructor,
-            )
-
 
 # Create your views here.
 def handleApi(request):
@@ -63,15 +43,12 @@ def cInfoApi(request):
     course_name = request.GET["cName"]
     course_num = str(request.GET["cNum"])
 
-    if False:
-        pass
-    else:
-        try:
-            course = get_course_info(term, [course_name, course_num])
-            save_course(course, term)
+    try:
+        course = get_course_info(term, (course_name, course_num))
 
-        except NoSectionsAvailableOnline:
-            pass  # TODO
+    except NoSectionsAvailableOnline:
+        print("NoSectionsAvailableOnline")
+        pass  # TODO
 
     context = {
         "course": course.name + course.num,
