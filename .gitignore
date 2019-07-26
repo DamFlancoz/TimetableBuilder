@@ -4,4 +4,4 @@
 /.venv/
 /Protos/
 /.pytest_cache/
-*have_*
+**/notinuse/
