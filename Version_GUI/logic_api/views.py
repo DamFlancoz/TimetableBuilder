@@ -2,8 +2,6 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse  # for Ajax
 from django.template.loader import render_to_string  # (template,context)
 
-from .models import Course_db
-
 from .helper.coursesinfo import get_course_info, NoSectionsAvailableOnline
 
 """
