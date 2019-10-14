@@ -2,7 +2,7 @@
 
 from bs4 import BeautifulSoup as bSoup
 
-from src.builderlibs.builderclasses import Section, Course
+from builderlibs.builderclasses import Section, Course
 
 
 def put_sections_in_course(course, course_page_html):

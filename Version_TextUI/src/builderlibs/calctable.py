@@ -2,8 +2,8 @@
 
 from copy import deepcopy
 
-from src.builderlibs.exceptions import NotFit, NoSectionOfTypeFit
-from src.builderlibs.builderclasses import Table, Course, Section
+from builderlibs.exceptions import NotFit, NoSectionOfTypeFit
+from builderlibs.builderclasses import Table, Course, Section
 
 # from exceptions import NotFit, NoSectionOfTypeFit
 # from builderclasses import Table, Course, Section

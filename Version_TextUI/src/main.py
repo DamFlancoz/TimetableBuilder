@@ -12,11 +12,11 @@ TODO:
 import re
 from time import localtime
 
-from src.builderlibs.webscrapper import get_course_html
-from src.builderlibs.parsehtml import put_sections_in_course
-from src.builderlibs.calctable import calculate_tables
-from src.builderlibs.builderclasses import Table, Course
-from src.builderlibs.exceptions import NoSectionsAvailableOnline, NoSectionOfTypeFit
+from builderlibs.webscrapper import get_course_html
+from builderlibs.parsehtml import put_sections_in_course
+from builderlibs.calctable import calculate_tables
+from builderlibs.builderclasses import Table, Course
+from builderlibs.exceptions import NoSectionsAvailableOnline, NoSectionOfTypeFit
 
 
 def set_term(inp):
