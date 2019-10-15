@@ -1,9 +1,10 @@
 body {
   --button-theme: rgb(0, 171, 236);
-  --panel-back: rgb(200, 200, 200);
+  --panel-back: rgb(182, 182, 182);
 
   background-color: rgb(141, 141, 141);
   background-image: url("background.jpeg");
+  background-repeat: no-repeat;
   background-size: cover;
   background-blend-mode: multiply;
 

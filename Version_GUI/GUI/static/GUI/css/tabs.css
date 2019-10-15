@@ -22,7 +22,7 @@
 }
 
 .tab-panels ul li.active {
-  color: #fff;
+  color: #444;
   background: var(--panel-back);
   cursor: default;
 }
@@ -31,7 +31,7 @@
   display: block;
   float: right;
 
-  background-color: #ccc;
+  background-color: #eee;
   opacity: 0.7;
   height: 10px;
   width: 10px;
@@ -49,7 +49,7 @@
 
 .tab-panels .panel {
   display: none;
-  background: #c9c9c9;
+  background: var(--panel-back);
   padding: 30px;
   border-radius: 0 0 10px 10px;
 }
