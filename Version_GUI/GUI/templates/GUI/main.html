@@ -24,10 +24,10 @@
   <link rel="stylesheet" href="{% static 'GUI/css/courses.css' %}">
   <link rel="stylesheet" href="{% static 'GUI/css/table.css' %}">
   <script src="{% static 'GUI/js/globals.js' %}"></script>
-  <script src="{% static 'GUI/js/messages.js' %}"></script>
-  <script src="{% static 'GUI/js/tabs.js' %}"></script>
-  <script src="{% static 'GUI/js/helper.js' %}"></script>
-  <script src="{% static 'GUI/js/events.js' %}"></script>
+  <script type="module" src="{% static 'GUI/js/messages.js' %}"></script>
+  <script type="module" src="{% static 'GUI/js/tabs.mjs' %}"></script>
+  <script type="module" src="{% static 'GUI/js/helper.mjs' %}"></script>
+  <script type="module" src="{% static 'GUI/js/events.mjs' %}"></script>
 
 </head>
 
@@ -86,6 +86,8 @@
 
   <!-- Timetable -->
   <div class='table' id="table">
+
+
   </div>
 
 </body>
