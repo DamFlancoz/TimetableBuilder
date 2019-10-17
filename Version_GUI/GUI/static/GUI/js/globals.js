@@ -22,30 +22,28 @@ $(function () {
         constructor(name, num) {
             this.name = name;
             this.num = num;
-            this.lecture = "";
-            this.lab = "";
-            this.tutorial = "";
+            this.$panel = "";
         }
 
         /**
          * Might be overridden to set the lecture section for course from input.
          */
         getLecture() {
-            return this;
+            return this.$panel.find("[name=lecture]:checked").val() || "";
         }
 
         /**
          * Might be overridden to set the lab section for course from input.
          */
         getLab() {
-            return this;
+            return this.$panel.find("[name=lab]:checked").val() || "";
         }
 
         /**
          * Might be overridden to set the tutorial section for course from input.
          */
         getTutorial() {
-            return this;
+            return this.$panel.find("[name=tutorial]:checked").val() || "";
         }
     }
     window.Course = Course;
@@ -87,7 +85,7 @@ $(function () {
      * @global
      * @type {jQuery Object} Saves tag which contains the timetable displayed.
      */
-    $tables = $("#tables");
+    $table = $("#table");
 
     /**
      * @global

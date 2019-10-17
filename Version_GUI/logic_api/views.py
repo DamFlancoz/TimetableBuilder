@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse  # for Ajax
+from django.http import HttpResponse, JsonResponse  # for Ajax
 from django.template.loader import render_to_string  # (template,context)
 
 from .helper.coursesinfo import get_course_info, NoSectionsAvailableOnline
@@ -7,7 +6,6 @@ from .helper.coursesinfo import get_course_info, NoSectionsAvailableOnline
 """
 HttpResponse(status=400), client side error, Bad Request
 HttpResponseBadRequest(content), Acts just like HttpResponse but uses a 400 status code
-render(request, 'template.html', status=204)
 """
 
 # Create your views here.
@@ -16,7 +14,7 @@ def handleApi(request):
     return HttpResponse("Hello World!")
 
 
-def cInfoApi(request):
+def get_cInfo(request):
     """
     Takes in term and course and returns coresponding course html (to put in tab).
 
@@ -89,21 +87,44 @@ def cInfoApi(request):
     return JsonResponse(data)
 
 
-def getTableApi(request):
-
-    # term = request.GET["term"]
+def get_table(request):
     """
-    courses = {'Math101':[sections], 'CSC111':[sections]}
-    """
-    # selected_courses = request.GET["selectedCourses"]
-    # day_constraints = request.GET["dayConstraints"]
+    Takes in courses and returns coresponding table html (to put table).
 
-    context = {}
+    Takes: term, course_name, course_num
+        eg. {
+                'term':201905,
+                'course_name':'MATH',
+                'course_num':101
+            }
+
+    Returns: html for tab (with course info in it)
+        eg. {
+                'message':<massage>,
+                'data':{
+                    'html':<table in html>,
+                    'course': 'MATH 101'
+                }
+            }
+    """
+
+    # term = str(request.GET["term"])
+
+    # try:
+    #     course = get_course_info(term, (course_name, course_num))
+
+    # except NoSectionsAvailableOnline:
+    #     print("NoSectionsAvailableOnline")
+    #     pass  # TODO
+
+    # context = {
+    #     "course": course.name + course.num,
+    # }
 
     data = {
         "message": "Success",
-        "html": [render_to_string("TableBuilder/tablepanel.html", context=context)],
-        "headers": [],
+        # "tableHTML": render_to_string("logic_api/coursePanel.html", context=context),
+        "tableHTML": "TODO",
     }
 
     return JsonResponse(data)

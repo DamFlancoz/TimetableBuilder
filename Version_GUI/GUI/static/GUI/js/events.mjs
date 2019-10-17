@@ -10,6 +10,26 @@ import { removeErrors, postError } from './messages.mjs';
 
 $(function () {
 
+  function refreshTable() {
+    // TODO
+    $.ajax({
+      type: "GET",
+      url: "/api/table/",
+      data: {
+        term: parseInt($term.val()),
+        cName: $cName.val(),
+        cNum: parseInt($cNum.val())
+      },
+      success: data => {
+
+        $table.html(data.tableHTML)
+      },
+      error: () => {
+        postError("connection-error");
+      }
+    })
+  }
+
   /**
    * Selects inputted course and displays it in a tab in cInfo panel.
    */
@@ -36,10 +56,12 @@ $(function () {
           cNum: parseInt($cNum.val())
         },
         success: data => {
-          selectedCourses.push(new Course($cName.val(), $cNum.val()));
 
-          //TODO cash the radio buttons
+          var course = new Course($cName.val(), $cNum.val())
+          selectedCourses.push(course);
 
+
+          // Init The course Tab
           function removeFromSelectedCourses() { // close button callback
 
             var $tab = $(this).closest("li");
@@ -50,9 +72,13 @@ $(function () {
               return name === course[0] && num === course[1];
             });
             if (index !== -1) selectedCourses.splice(index, 1);
-          }
 
+          }
           addTab($cInfo, data.course, data.html, removeFromSelectedCourses);
+
+
+          course.$panel = $cInfo.find(`#${course.name}-${course.num}`);
+          course.$panel.find("input").on("click", refreshTable);
         },
         error: () => {
           postError("connection-error");

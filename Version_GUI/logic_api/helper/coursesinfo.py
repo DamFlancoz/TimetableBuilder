@@ -10,7 +10,7 @@ from ..models import Course_db, Section_db
 from .classes import Course, Section, NoSectionsAvailableOnline
 
 
-def delete_course_to_db(term, course):
+def delete_course_in_db(term, course):
     """
     Deletes given course from database. Not used in any view, must be invoked manually.
 

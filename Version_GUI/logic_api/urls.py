@@ -16,4 +16,7 @@ Including another URLconf
 from . import views
 from django.urls import path
 
-urlpatterns = [path("cInfo/", views.cInfoApi)]
+urlpatterns = [
+    path("cInfo/", views.get_cInfo),
+    path("table/", views.get_table),
+]
