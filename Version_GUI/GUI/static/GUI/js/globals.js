@@ -46,6 +46,11 @@ $(function () {
             return this.$panel.find("[name=tutorial]:checked").val() || "";
         }
     }
+
+    Course.prototype.toString = function () {
+        return `${this.name} ${this.num}`;
+    }
+
     window.Course = Course;
 
     // Globals

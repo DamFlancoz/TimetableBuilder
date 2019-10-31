@@ -9,19 +9,25 @@ import { addTab } from './tabs.mjs';
 import { removeErrors, postError } from './messages.mjs';
 
 $(function () {
+  removeErrors();
 
   function refreshTable() {
     // TODO
     $.ajax({
-      type: "GET",
+      type: "POST",
       url: "/api/table/",
       data: {
-        term: parseInt($term.val()),
-        cName: $cName.val(),
-        cNum: parseInt($cNum.val())
+        // Makes mapping like {<course>:{'lab':<lab section>,...} ... more courses}
+        selectedSections: JSON.stringify(selectedCourses.reduce((obj, course) => {
+          obj[course.toString()] = {
+            'lab': course.getLab(),
+            'lecture': course.getLecture(),
+            'tutorial': course.getTutorial(),
+          };
+          return obj;
+        }, {})),
       },
       success: data => {
-
         $table.html(data.tableHTML)
       },
       error: () => {

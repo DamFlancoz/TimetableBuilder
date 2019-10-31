@@ -1,5 +1,9 @@
+import ast
+
 from django.http import HttpResponse, JsonResponse  # for Ajax
 from django.template.loader import render_to_string  # (template,context)
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.datastructures import MultiValueDict as m_dict
 
 from .helper.coursesinfo import get_course_info, NoSectionsAvailableOnline
 
@@ -87,44 +91,40 @@ def get_cInfo(request):
     return JsonResponse(data)
 
 
+@csrf_exempt
 def get_table(request):
     """
     Takes in courses and returns coresponding table html (to put table).
 
     Takes: term, course_name, course_num
         eg. {
-                'term':201905,
-                'course_name':'MATH',
-                'course_num':101
+                'selectedSections': '{
+                    'MATH 101': {
+                        'lab':'B01',
+                        'lecture': 'A01',
+                        'tutorial': '',
+                    }
+                }',
             }
 
     Returns: html for tab (with course info in it)
         eg. {
                 'message':<massage>,
-                'data':{
-                    'html':<table in html>,
-                    'course': 'MATH 101'
-                }
+                'tableHTML': <html for table>,
             }
     """
 
-    # term = str(request.GET["term"])
+    selected_sections = ast.literal_eval(request.POST.get("selectedSections", None))
+    print([selected_sections])
 
-    # try:
-    #     course = get_course_info(term, (course_name, course_num))
+    # calc table
 
-    # except NoSectionsAvailableOnline:
-    #     print("NoSectionsAvailableOnline")
-    #     pass  # TODO
-
-    # context = {
-    #     "course": course.name + course.num,
-    # }
+    # make html
+    context = {"course": 1}
 
     data = {
-        "message": "Success",
-        # "tableHTML": render_to_string("logic_api/coursePanel.html", context=context),
-        "tableHTML": "TODO",
+        "message": "In Process",
+        "tableHTML": render_to_string("logic_api/tablePanel.html", context={}),
     }
 
     return JsonResponse(data)
