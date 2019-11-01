@@ -6,13 +6,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.datastructures import MultiValueDict as m_dict
 
 from .helper.coursesinfo import get_course_info, NoSectionsAvailableOnline
+from .helper.tablebuilder import build_table, NotFit
 
 """
 HttpResponse(status=400), client side error, Bad Request
 HttpResponseBadRequest(content), Acts just like HttpResponse but uses a 400 status code
 """
 
-# Create your views here.
+
 def handleApi(request):
     """Test api"""
     return HttpResponse("Hello World!")
@@ -111,20 +112,28 @@ def get_table(request):
         eg. {
                 'message':<massage>,
                 'tableHTML': <html for table>,
+                'error': 'None',
             }
     """
 
+    # eg. {'CSC 111': {'lab': 'B01', 'lecture': 'A02', 'tutorial': ''}, ...}
     selected_sections = ast.literal_eval(request.POST.get("selectedSections", None))
-    print([selected_sections])
 
-    # calc table
+    try:
+        html_table = build_table(selected_sections).to_html_table()
+        return JsonResponse(
+            {
+                "message": "Table without css",
+                "tableHTML": str(html_table),
+                "error": "None",
+            }
+        )
 
-    # make html
-    context = {"course": 1}
-
-    data = {
-        "message": "In Process",
-        "tableHTML": render_to_string("logic_api/tablePanel.html", context={}),
-    }
-
-    return JsonResponse(data)
+    except NotFit:
+        return JsonResponse(
+            {
+                "message": "Sections don't fit together",
+                "tableHTML": "",
+                "error": "courses-not-fit",
+            }
+        )

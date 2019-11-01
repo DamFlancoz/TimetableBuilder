@@ -1,8 +1,12 @@
 """ This module contains all the classes used for courseinfo and tablebuilder. """
 
+from .htmltable import table_to_html_table
+
+
 class Table(object):
     def __init__(self):
 
+        # Contain lists, eg. [15.5, 16.5, 'SENG 265', 'A01']
         self.M = []
         self.T = []
         self.W = []
@@ -12,32 +16,27 @@ class Table(object):
         # each element is a list of sections which have same time
         self.sections = []
 
-        # adds Course('start) and Course('end') to each day
-        # self.addPaddingCourses()
-
-        # Course('break') may also be added
-
-    def __getitem__(self, i):
-
-        # allows t['M'] to access t.M
-        # Used in inserting in tables
-
-        return eval("self." + i)
-
-    def __iter__(self):
-
-        yield self.M
-        yield self.T
-        yield self.W
-        yield self.R
-        yield self.F
+    def __getitem__(self, d):
+        return self.__getattribute__(d)
 
     def __str__(self):  # TODO: improve this
-
-        # course_rep eg. [13,14,'CSC111','A01']
+        """
+        eg.
+        M: [15.5, 16.5, 'SENG265', 'A01']
+        T: [8.5, 9.5, 'CSC230', 'A01']
+        W: [8.5, 9.5, 'CSC230', 'A01'], [15.5, 16.5, 'SENG265', 'A01']
+        R: [15.5, 16.5, 'SENG265', 'A01']
+        F: [8.5, 9.5, 'CSC230', 'A01']
+        """
         return "\n".join(
-            day + ": " + str(table)[1:-1] for day, table in zip("MTWRF", self)
+            day + ": " + str(courses)[1:-1] for day, courses in zip("MTWRF", self)
         )
+
+    def __iter__(self):
+        return (self[d] for d in "MTWRF")
+
+    def to_html_table(self):
+        return table_to_html_table(self)
 
 
 class Course(object):
@@ -53,9 +52,7 @@ class Course(object):
 
     def __eq__(self, course):
 
-        if (
-            type(course) == list and len(course) == 2
-        ):  # Used in main->rem Command, takes [course,num]
+        if type(course) == list and len(course) == 2:
             return course[0] == self.name and course[1] == self.num
 
         elif type(course) == Course:
@@ -73,22 +70,14 @@ class Course(object):
         return not self == course
 
     def __str__(self):
-        s = "Course: " + self.name + " " + self.num + "\nLectures:\n"
 
-        for i in self.lectures:
-            s += "\t" + str(i) + "\n"
+        return f"""{self}
+Lectures: {','.join(i for i in self.lectures)}
+Labs:   {','.join(i for i in self.labs)}
+Tutorials: {','.join(i for i in self.tutorials)}"""
 
-        s += "Labs:\n"
-
-        for i in self.labs:
-            s += "\t" + str(i) + "\n"
-
-        s += "Tutorials:\n"
-
-        for i in self.tutorials:
-            s += "\t" + str(i) + "\n"
-
-        return s
+    def __repr__(self):
+        return f"{self.name} {self.num}"
 
     def __iter__(self):  # type - lectures, labs & tutorials
         yield self.lectures
@@ -135,35 +124,12 @@ class Section(object):
         return not self == other
 
     def __str__(self):
-        return (
-            "Course: "
-            + self.course_name
-            + " "
-            + self.course_num
-            + " | Section: "
-            + self.section
-            + " | Time: "
-            + str(self.time)
-            + " | Days: "
-            + self.days
-        )
+        return f"{self.section} {self.time} {self.days}"
 
     def __rep__(self):
-        return (
-            "Course: "
-            + self.course_name
-            + " "
-            + self.course_num
-            + " | Section: "
-            + self.section
-            + " | Time: "
-            + str(self.time)
-            + " | Days: "
-            + self.days
-        )
+        return f"{self.course_name} {self.course_num}: {self.section} {self.time} {self.days}"
 
     def setTime(self, time):
-
         """
         Converts time from webscraper to tuple of start and end integers.
         eg. '8:30 am - 9:50 am' = (8.5, 10)
@@ -201,12 +167,14 @@ class NoSectionsAvailableOnline(Exception):
     """
 
     def __init__(self, course):
-        super().__init__("No sections available online for given course")
+        super().__init__(f"No sections available online for {course}")
         self.course = course
+
 
 class NotFit(Exception):
     """
     Raised if a section does not fit in a timetable, timing-wise.
     Used in calculating table. Not an error.
     """
+
     pass

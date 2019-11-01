@@ -5,7 +5,7 @@ Use calculate_tables.
 
 from time import localtime  # for seting term
 
-from .classes import Table, NotFit
+from .classes import Table, Course, NotFit
 from .coursesinfo import get_course_info
 
 
@@ -13,14 +13,14 @@ def build_table(selected_sections):
 
     term = get_current_term()
 
-    courses = [get_course_info(term, c.split()) for c in selected_sections]
+    courses = [get_course_info(term, Course(*c.split())) for c in selected_sections]
 
     filter_sections(courses, selected_sections)
 
     table = Table()  # free weekly default
 
     for course in courses:
-        for type_ in course: # lab, lecture and tutorial
+        for type_ in course:  # lab, lecture and tutorial
             for section in type_:
                 insert_in_table(section, table)
 
@@ -42,7 +42,7 @@ def insert_in_table(section, table):
     to_insert = [
         time[0],
         time[1],
-        section.course_name + section.course_num,
+        f"{section.course_name} {section.course_num}",
         section.section,
     ]
 
