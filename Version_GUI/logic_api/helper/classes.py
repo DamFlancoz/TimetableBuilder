@@ -1,9 +1,6 @@
-"""
-This module contains all the classes used.
-"""
+""" This module contains all the classes used for courseinfo and tablebuilder. """
 
-
-class Table:
+class Table(object):
     def __init__(self):
 
         self.M = []
@@ -43,7 +40,7 @@ class Table:
         )
 
 
-class Course:
+class Course(object):
     def __init__(self, course, num):
 
         self.name = course
@@ -99,7 +96,7 @@ class Course:
         yield self.tutorials
 
 
-class Section:
+class Section(object):
     def __init__(self):
 
         self.course_name = ""
@@ -197,37 +194,19 @@ class Section:
 
 
 # Exceptions
-
-"""
-Raised if the Uvic says sections for course are not available.
-Used in WebScrapper
-"""
-
-
 class NoSectionsAvailableOnline(Exception):
+    """
+    Raised if the Uvic says sections for course are not available.
+    Used in WebScrapper
+    """
+
     def __init__(self, course):
-        super().__init__("")
+        super().__init__("No sections available online for given course")
         self.course = course
-
-
-"""
-raised if no sections of a type can fit due to inputted time constraints
-eg. you cannot enter any tutorial of Engr 141 because they are all at night
-    and you said you dont want any night stuff.
-"""
-
-
-class NoSectionOfTypeFit(Exception):
-    def __init__(self, course):
-        super().__init__("")
-        self.course = course
-
-
-"""
-Raised if a section doesnot fit in a timetable
-Used in EvalTable. Not an error.
-"""
-
 
 class NotFit(Exception):
+    """
+    Raised if a section does not fit in a timetable, timing-wise.
+    Used in calculating table. Not an error.
+    """
     pass
