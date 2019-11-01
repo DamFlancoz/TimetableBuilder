@@ -108,21 +108,21 @@ def retreive_course_from_db(term, course):
 
     course = Course(course_db.name, course_db.num)
 
-    course.lectures = retreive_sections_from_db(
+    course.lectures = convert_sections_db_to_sections(
         course, course_db.section_db_set.filter(type="LE")
     )
 
-    course.labs = retreive_sections_from_db(
+    course.labs = convert_sections_db_to_sections(
         course, course_db.section_db_set.filter(type="LA")
     )
 
-    course.tutorials = retreive_sections_from_db(
+    course.tutorials = convert_sections_db_to_sections(
         course, course_db.section_db_set.filter(type="TU")
     )
     return course
 
 
-def retreive_sections_from_db(course, sections_qset):
+def convert_sections_db_to_sections(course, sections_qset):
     """
     Takes in Section_dbs and returns a list of them converted to Section Objects
 
