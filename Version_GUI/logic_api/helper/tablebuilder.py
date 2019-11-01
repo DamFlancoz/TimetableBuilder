@@ -3,78 +3,28 @@ This module provides functionality to calculate time tables.
 Use calculate_tables.
 """
 
-from copy import deepcopy  # For testing eval table
 from time import localtime  # for seting term
 
-from .classes import Table, Course, Section, NotFit, NoSectionOfTypeFit
+from .classes import Table, NotFit
+from .coursesinfo import get_course_info
 
 
-def calculate_tables(selected_courses, day_lengths):
+def build_table(selected_sections):
 
-    tables = [Table()]  # free weekly default
+    term = get_current_term()
 
-    # Acts as buffer for new tables made in each type for each section
-    new_tables = {}
+    courses = [get_course_info(term, c.split()) for c in selected_sections]
 
-    for course in selected_courses:
-        for type_ in course:
+    filter_sections(courses, selected_sections)
+
+    table = Table()  # free weekly default
+
+    for course in courses:
+        for type_ in course: # lab, lecture and tutorial
             for section in type_:
+                insert_in_table(section, table)
 
-                # skip if class falls out of required schedule
-                if not check_section_with_day_lengths(section, day_lengths):
-                    continue
-
-                for i, t in enumerate(tables):
-
-                    # i is in new_tables[(time,section.days,i)] so that a section does keep puting itself
-                    #  eg 'A01' in next iterations of tables sees its previous entry in new tables and puts
-                    #      itself wih it again.
-                    # But it allows other section with same day and time to find the table
-
-                    # [start,end] eg [11,13.5] for'11am-1:20pm'
-                    time = section.time
-
-                    if not (time, section.days, i) in new_tables:
-                        table = deepcopy(t)
-
-                        try:
-                            table = insert_in_table(section, table)
-
-                            new_tables[(time, section.days, i)] = table
-
-                        except NotFit:
-                            continue
-                    else:
-                        new_tables[(time, section.days, i)] = insert_same_in_table(
-                            section, new_tables[(time, section.days, i)]
-                        )
-
-            # if no section of a type can be added then
-            if (not new_tables) and type_:
-                raise NoSectionOfTypeFit(course)
-
-            # If at start a type_ is [] it makes table [] in comprehension
-            # but you want it to remain a free table (default value) so loop
-            # for tables can run.
-
-            tables = list(new_tables.values()) if new_tables else tables
-            new_tables = {}
-
-    return tables
-
-
-def check_section_with_day_lengths(section, day_lengths):
-    """
-    returns True if section is compatible with day_lengths
-    """
-    for day in section.days:
-        if (
-            section.time[0] < day_lengths[day][0]
-            or section.time[1] > day_lengths[day][1]
-        ):
-            return False
-    else:
-        return True
+    return table
 
 
 def insert_in_table(section, table):
@@ -85,7 +35,6 @@ def insert_in_table(section, table):
     inserts - [start,end,course+courseno.,section]
     eg. [12.5,13.5,'MATH101','T01']
     """
-
     time = section.time
 
     # Waring this makes the lists in all days point to sam list
@@ -125,33 +74,7 @@ def insert_in_table(section, table):
     return table
 
 
-def insert_same_in_table(section, table):
-    """
-    Inserts in a section which has same timings as another inserted class
-    eg. [12.5,13.5,'MATH101','T01'] to [12.5,13.5,'MATH101','T01','T02']
-    """
-    time = section.time
-    day = section.days[0]
-
-    # you dont need to add section to each day since all of them
-    # point to same list
-    for i in range(len(table[day])):
-        if table[day][i][0] == time[0] and time[1] == table[day][i][1]:
-            table[day][i].append(section.section)
-            break
-
-    for s in table.sections:
-        if s[0] == section:
-            s.append(section)
-            break
-
-    return table
-
-
-######################################################### Main ###############################
-
-
-def set_term(inp):
+def get_current_term():
     """
     set_term
     takes - input argument for term and
@@ -161,17 +84,6 @@ def set_term(inp):
     # gives tuple (year,month,date,h,min,s,weekday, etc.)
     time = localtime()
 
-    if ("next" in inp) or ("n" in inp):
-
-        time[1] = 1 if time[1] + 4 == 13 else time[1] + 4
-
-    elif ("current" in inp) or ("curr" in inp):
-        pass
-
-    elif inp.isdigit() and len(inp) == 6:
-        return inp
-
-    # set term according to time given
     if time[1] in [1, 2, 3, 4]:  # next term from jan
         term = str(time[0]) + "01"
 
@@ -184,8 +96,17 @@ def set_term(inp):
     return term
 
 
-############################## Global Variables
+def filter_sections(courses, selected_sections):
+    """
+    Takes out not selected sections.
+    """
+    for c in courses:
+        c_key = f"{c.name} {c.num}"
 
-term = set_term("curr")  # term chosen
-selected_courses = []  # Course objects
-day_lengths = {"M": [0, 24], "T": [0, 24], "W": [0, 24], "R": [0, 24], "F": [0, 24]}
+        lab_section = selected_sections[c_key]["lab"]
+        lecture_section = selected_sections[c_key]["lecture"]
+        tutorial_section = selected_sections[c_key]["tutorial"]
+
+        c.labs = [s for s in c.labs if s.section == lab_section]
+        c.lectures = [s for s in c.lectures if s.section == lecture_section]
+        c.tutorials = [s for s in c.tutorials if s.section == tutorial_section]
