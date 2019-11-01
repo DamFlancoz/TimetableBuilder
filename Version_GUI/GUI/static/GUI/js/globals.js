@@ -29,21 +29,21 @@ $(function () {
          * Might be overridden to set the lecture section for course from input.
          */
         getLecture() {
-            return this.$panel.find("[name=lecture]:checked").val() || "";
+            return this.$panel.find(`[name=lecture-${this.name}-${this.num}]:checked`).val() || "";
         }
 
         /**
          * Might be overridden to set the lab section for course from input.
          */
         getLab() {
-            return this.$panel.find("[name=lab]:checked").val() || "";
+            return this.$panel.find(`[name=lab-${this.name}-${this.num}]:checked`).val() || "";
         }
 
         /**
          * Might be overridden to set the tutorial section for course from input.
          */
         getTutorial() {
-            return this.$panel.find("[name=tutorial]:checked").val() || "";
+            return this.$panel.find(`[name=tutorial-${this.name}-${this.num}]:checked`).val() || "";
         }
     }
 

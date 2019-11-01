@@ -19,20 +19,23 @@ export function postError(error) {
     let $message = $("<li>").addClass(`alert alert-danger ${error}`);
 
     switch (error) {
-        case "alreadyIn":
+        case "already-in":
             $message.text("Course already selected");
             break;
 
-        case "invalidNum":
+        case "invalid-num":
             $message.text("'No.' is invalid");
             break;
 
-        case "numNotGiven":
+        case "num-not-given":
             $message.text("'No.' not given");
             break;
 
         case "connection-error":
             $message.text("Error Ocurred in connecting to back-end");
+
+        case "courses-not-fit":
+            $message.text("Sections don't fit together");
     }
 
     // Post it to user

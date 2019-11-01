@@ -12,7 +12,8 @@ $(function () {
   removeErrors();
 
   function refreshTable() {
-    // TODO
+    removeErrors();
+
     $.ajax({
       type: "POST",
       url: "/api/table/",
@@ -28,7 +29,11 @@ $(function () {
         }, {})),
       },
       success: data => {
-        $table.html(data.tableHTML)
+        if (data.error === "None") {
+          $table.html(data.tableHTML);
+        } else {
+          postError(data.error);
+        }
       },
       error: () => {
         postError("connection-error");
@@ -44,13 +49,13 @@ $(function () {
 
     // Validate and send
     if (!$cNum.val()) {
-      postError("numNotGiven");
+      postError("num-not-given");
 
     } else if (100 > parseInt($cNum.val()) || parseInt($cNum.val()) >= 800) {
-      postError("invalidNum");
+      postError("invalid-num");
 
     } else if (courseAlreadySelected()) {
-      postError("alreadyIn");
+      postError("already-in");
 
     } else {
       $.ajax({

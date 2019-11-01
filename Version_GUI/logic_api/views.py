@@ -52,7 +52,7 @@ def get_cInfo(request):
         pass  # TODO
 
     context = {
-        "course": course.name + course.num,
+        "course": f"{course.name}-{course.num}",
         "lectures": [
             {
                 "name": s.section,

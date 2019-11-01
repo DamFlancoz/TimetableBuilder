@@ -5,6 +5,12 @@
   margin: 0.5rem;
 }
 
-.alternate-row {
+.table-headers {
+}
+
+.even-row {
   background: rbg(170, 170, 170);
+}
+
+.course-entry {
 }

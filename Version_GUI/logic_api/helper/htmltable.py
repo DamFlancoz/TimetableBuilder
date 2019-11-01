@@ -21,12 +21,16 @@ def table_to_html_table(table):
 
     # Initialize table
     html_table = HTMLTable()
+    html_table.append_row(
+        ["Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    )
+    html_table[-1].classes.append("table-headers")
     for i in drange(min_time, max_time + 0.5, 0.5):
         html_table.append_row([str(i), "", "", "", "", ""])
 
         if int((i - min_time) * 2) % 2 == 1:
             # according to html viewing in browser
-            html_table[-1].classes.append("even")
+            html_table[-1].classes.append("even-row")
 
     # put classes in table, merges cells to show time
     for col, day in enumerate(table):
@@ -34,8 +38,8 @@ def table_to_html_table(table):
 
         for start, end, course, section in day:
 
-            start = int((start - min_time) * 2)
-            end = int((end - min_time) * 2)
+            start = int((start - min_time) * 2) + 1
+            end = int((end - min_time) * 2) + 1
 
             html_table[start][col] = f"{course} {section}"
             html_table[start][col].classes.append("course-entry")

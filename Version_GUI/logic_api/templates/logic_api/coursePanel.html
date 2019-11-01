@@ -7,7 +7,7 @@
     </tr>
     {% for section in lectures %}
     <tr>
-        <td><input type='radio' name="lecture" value="{{section.name}}" checked></input></td>
+        <td><input type='radio' name="lecture-{{course}}" value="{{section.name}}" checked></input></td>
         <td>{{section.name}}&nbsp;</td>
         <td>{{section.time}}&nbsp;</td>
         <td>{{section.days}}&nbsp;</td>
@@ -22,7 +22,7 @@
     </tr>
     {% for section in labs %}
     <tr>
-        <td><input type='radio' name="lab" value="{{section.name}}" checked></input></td>
+        <td><input type='radio' name="lab-{{course}}" value="{{section.name}}" checked></input></td>
         <td>{{section.name}}&nbsp;</td>
         <td>{{section.time}}&nbsp;</td>
         <td>{{section.days}}&nbsp;</td>
@@ -37,7 +37,7 @@
     </tr>
     {% for section in tutorials %}
     <tr>
-        <td><input type='radio' name="tutorial" value="{{section.name}}" checked></input></td>
+        <td><input type='radio' name="tutorial-{{course}}" value="{{section.name}}" checked></input></td>
         <td>{{section.name}}&nbsp;</td>
         <td>{{section.time}}&nbsp;</td>
         <td>{{section.days}}&nbsp;</td>
