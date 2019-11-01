@@ -90,7 +90,7 @@ $(function () {
      * @global
      * @type {jQuery Object} Saves tag which contains the timetable displayed.
      */
-    $table = $("#table");
+    $table = $("#timetable");
 
     /**
      * @global

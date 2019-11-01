@@ -21,12 +21,14 @@ def table_to_html_table(table):
 
     # Initialize table
     html_table = HTMLTable()
+    html_table.classes.append("table")
     html_table.append_row(
-        ["Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        ["Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        headers=list(range(6)),
     )
-    html_table[-1].classes.append("table-headers")
+    html_table[-1].classes.append("table-header")
     for i in drange(min_time, max_time + 0.5, 0.5):
-        html_table.append_row([str(i), "", "", "", "", ""])
+        html_table.append_row([str(i), "", "", "", "", ""], headers=[0])
 
         if int((i - min_time) * 2) % 2 == 1:
             # according to html viewing in browser
@@ -51,6 +53,7 @@ def table_to_html_table(table):
 class HTMLTable:
     def __init__(self, rows=[]):
         self.rows = []
+        self.classes = []
         for row in rows:
             self.append_row(row)
 
@@ -62,7 +65,8 @@ class HTMLTable:
 
     def __str__(self):
         trs = "    " + "    ".join(str(r) for r in self.rows)
-        return f"<table>\n{trs}</table>"
+        classes = " ".join(self.classes)
+        return f'<table class="{classes}">\n{trs}</table>'
 
     def merge(self, axis_val, start, end, axis="rows"):
         if axis == "rows":
@@ -74,11 +78,14 @@ class HTMLTable:
         else:
             raise ValueError("Invalid axis, it can only be rows or cols")
 
-    def append_row(self, row=None):
+    def append_row(self, row=None, headers=[]):
         self.rows.append(tr())
         if row:
-            for data in row:
-                self[-1].add_td(data)
+            for i, data in enumerate(row):
+                if i in headers:
+                    self[-1].add_th(data)
+                else:
+                    self[-1].add_td(data)
 
 
 class tr:
@@ -110,6 +117,9 @@ class tr:
     def add_td(self, data=""):
         self.data.append(td(data))
 
+    def add_th(self, data=""):
+        self.data.append(th(data))
+
 
 class td:
     def __init__(self, content=""):
@@ -127,3 +137,8 @@ class td:
         classes = " ".join(self.classes)
         attributes = " ".join(f'{k}="{v}"' for k, v in self.attributes.items())
         return f'<td class="{classes}" {attributes}>{self.content}</td>\n'
+
+
+class th(td):
+    def __str__(self):
+        return super().__str__().replace("<td", "<th").replace("</td>", "</th>")

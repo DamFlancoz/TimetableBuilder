@@ -1,6 +1,6 @@
 body {
   --button-theme: rgb(0, 171, 236);
-  --panel-back: rgb(182, 182, 182);
+  --panel-back: rgb(180, 180, 180);
 
   background-color: rgb(141, 141, 141);
   background-image: url("background.jpeg");
