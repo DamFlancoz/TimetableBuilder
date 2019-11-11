@@ -9,9 +9,7 @@ from .classes import Table, Course, NotFit
 from .coursesinfo import get_course_info
 
 
-def build_table(selected_sections):
-
-    term = get_current_term()
+def build_table(term, selected_sections):
 
     courses = [get_course_info(term, Course(*c.split())) for c in selected_sections]
 
@@ -72,28 +70,6 @@ def insert_in_table(section, table):
     table.sections.append([section])
 
     return table
-
-
-def get_current_term():
-    """
-    set_term
-    takes - input argument for term and
-    return - term value equal accordingly
-    """
-
-    # gives tuple (year,month,date,h,min,s,weekday, etc.)
-    time = localtime()
-
-    if time[1] in [1, 2, 3, 4]:  # next term from jan
-        term = str(time[0]) + "01"
-
-    elif time[1] in [5, 6, 7, 8]:  # next term from may
-        term = str(time[0]) + "05"
-
-    else:  # current term from sept
-        term = str(time[0]) + "09"
-
-    return term
 
 
 def filter_sections(courses, selected_sections):

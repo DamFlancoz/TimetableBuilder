@@ -21,6 +21,7 @@ class Section_db(models.Model):
     crn = models.IntegerField(unique=True)
     sTime = models.DecimalField(max_digits=3, decimal_places=1)
     eTime = models.DecimalField(max_digits=3, decimal_places=1)
+    formated_time = models.CharField(max_length=100)
     days = models.CharField(max_length=5)
     place = models.CharField(max_length=100)
     instructor = models.CharField(max_length=100)

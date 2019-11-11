@@ -18,6 +18,8 @@ $(function () {
       type: "POST",
       url: "/api/table/",
       data: {
+        term: parseInt($term.val()),
+
         // Makes mapping like {<course>:{'lab':<lab section>,...} ... more courses}
         selectedSections: JSON.stringify(selectedCourses.reduce((obj, course) => {
           obj[course.toString()] = {
@@ -27,6 +29,7 @@ $(function () {
           };
           return obj;
         }, {})),
+
       },
       success: data => {
         if (data.error === "None") {
@@ -51,7 +54,7 @@ $(function () {
     if (!$cNum.val()) {
       postError("num-not-given");
 
-    } else if (/^\d{3}$/.exec($cNum.val()) || 100 > parseInt($cNum.val()) || parseInt($cNum.val()) >= 800) {
+    } else if (!(/^\d{3}$/.exec($cNum.val())) || 100 > parseInt($cNum.val()) || parseInt($cNum.val()) >= 800) {
       postError("invalid-num");
 
     } else if (courseAlreadySelected()) {

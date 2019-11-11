@@ -48,8 +48,8 @@
         <label for="term" class="mr-sm-2">Term:</label>
         <select id="term" class="form-control">
 
-          {% for option in termOptions %}
-          <option value="{{option}}">{{option}}</option>
+          {% for code,term in termOptions %}
+          <option value="{{code}}">{{term}}</option>
           {% endfor %}
 
         </select>

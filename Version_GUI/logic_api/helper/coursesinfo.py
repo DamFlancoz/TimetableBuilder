@@ -82,6 +82,7 @@ def save_course_to_db(term, course):
                 crn=section.crn,
                 sTime=section.time[0],
                 eTime=section.time[1],
+                formated_time=section.formated_time,
                 days=section.days,
                 place=section.place,
                 instructor=section.instructor,
@@ -141,6 +142,7 @@ def convert_sections_db_to_sections(course, sections_qset):
         s.section = section_db.section
         s.crn = section_db.crn
         s.time = (float(section_db.sTime), float(section_db.eTime))
+        s.formated_time = section_db.formated_time
         s.days = section_db.days
         s.place = section_db.place
         s.instructor = section_db.instructor

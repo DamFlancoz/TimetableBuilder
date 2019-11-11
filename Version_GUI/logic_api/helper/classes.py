@@ -93,6 +93,7 @@ class Section(object):
         self.section = ""
         self.crn = ""
         self.time = ()
+        self.formated_time = ""
         self.days = ""
         self.place = ""
         self.instructor = ""
@@ -134,6 +135,8 @@ class Section(object):
         Converts time from webscraper to tuple of start and end integers.
         eg. '8:30 am - 9:50 am' = (8.5, 10)
         """
+
+        self.formated_time = time
 
         time = time.split(" - ")  # [['3:30 pm','4:30 pm']
 

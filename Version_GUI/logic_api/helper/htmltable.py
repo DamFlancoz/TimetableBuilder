@@ -27,8 +27,8 @@ def table_to_html_table(table):
         headers=list(range(6)),
     )
     html_table[-1].classes.append("table-header")
-    for i in drange(min_time, max_time + 0.5, 0.5):
-        html_table.append_row([str(i), "", "", "", "", ""], headers=[0])
+    for i in drange(min_time, max_time + 1, 0.5):
+        html_table.append_row([format_hour(i), "", "", "", "", ""], headers=[0])
 
         if int((i - min_time) * 2) % 2 == 1:
             # according to html viewing in browser
@@ -48,6 +48,20 @@ def table_to_html_table(table):
             html_table.merge(col, start, end)
 
     return html_table
+
+
+def format_hour(d):
+    """
+    Takes float:
+        1, 12.5, 13
+    and returns it formatted into am/pm time:
+        1 am, 12:30 pm, 1 pm
+    """
+    am_pm = "am" if d < 12 else "pm"
+    minutes = "00" if d.is_integer() else "30"
+    hour = int(d - 12 if d > 12.5 else d)
+
+    return f"{hour}:{minutes} {am_pm}"
 
 
 class HTMLTable:

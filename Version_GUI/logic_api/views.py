@@ -56,7 +56,7 @@ def get_cInfo(request):
         "lectures": [
             {
                 "name": s.section,
-                "time": s.time,
+                "formated_time": s.formated_time,
                 "days": s.days,
                 "instructor": s.instructor,
             }
@@ -65,7 +65,7 @@ def get_cInfo(request):
         "labs": [
             {
                 "name": s.section,
-                "time": s.time,
+                "formated_time": s.formated_time,
                 "days": s.days,
                 "instructor": s.instructor,
             }
@@ -74,7 +74,7 @@ def get_cInfo(request):
         "tutorials": [
             {
                 "name": s.section,
-                "time": s.time,
+                "formated_time": s.formated_time,
                 "days": s.days,
                 "instructor": s.instructor,
             }
@@ -118,9 +118,11 @@ def get_table(request):
 
     # eg. {'CSC 111': {'lab': 'B01', 'lecture': 'A02', 'tutorial': ''}, ...}
     selected_sections = ast.literal_eval(request.POST.get("selectedSections", None))
+    term = request.POST.get("term", None)
+    print(term)
 
     try:
-        html_table = build_table(selected_sections).to_html_table()
+        html_table = build_table(term, selected_sections).to_html_table()
         return JsonResponse(
             {
                 "message": "Table without css",
