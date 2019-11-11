@@ -51,7 +51,7 @@ $(function () {
     if (!$cNum.val()) {
       postError("num-not-given");
 
-    } else if (100 > parseInt($cNum.val()) || parseInt($cNum.val()) >= 800) {
+    } else if (/^\d{3}$/.exec($cNum.val()) || 100 > parseInt($cNum.val()) || parseInt($cNum.val()) >= 800) {
       postError("invalid-num");
 
     } else if (courseAlreadySelected()) {
