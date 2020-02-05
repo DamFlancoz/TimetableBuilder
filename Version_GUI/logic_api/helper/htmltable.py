@@ -45,7 +45,7 @@ def table_to_html_table(table):
 
             html_table[start][col] = f"{course} {section}"
             html_table[start][col].classes.append("course-entry")
-            html_table.merge(col, start, end)
+            html_table.merge(col, start, end-1)
 
     return html_table
 
