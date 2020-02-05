@@ -178,7 +178,7 @@ def main():
                 print(course.name, course.num + ",", end="")
 
             print()  # moves cursor to next line
-            print(i + ": " + str(day_lengths[i]) for i in day_lengths)
+            # print(i + ": " + str(day_lengths[i]) for i in day_lengths)
 
         elif "start" in inp and "at" in inp:
             inp = inp.split(" ")
