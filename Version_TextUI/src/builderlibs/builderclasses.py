@@ -194,18 +194,18 @@ class Section:
         # For start('3:30 pm') and end ('4:30 pm') terms
         for i in range(2):
 
-            t = time[i][:5].split(":")  # converts to '3:30 ' or '10:50'
+            t = time[i][:-2].split(":")  # from '3:30 ' or '10:50' to ('3', '30) or ...
             t[0] = int(t[0].strip())  # takes hour eg. 3 or 10
+
+            # Adjust to 24 hr notation
+            if "pm" in time[i] and t[0] != 12:
+                t[0] += 12
 
             # Adjust according to minutes eg. 3:30/3:20 to 3.5
             if "30" in t[1] or "20" in t[1]:
                 t[0] += 0.5
             elif "50" in t[1]:
                 t[0] += 1
-
-            # Adjust to 24 hr notation
-            if "pm" in time[i] and t[0] != 12:
-                t[0] += 12
 
             # Store new value
             time[i] = t[0]
